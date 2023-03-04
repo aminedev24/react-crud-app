@@ -5,14 +5,21 @@ import MaterialList from './materialList';
 import ProductForm from './productForm'
 import ProductList from './productList';
 const initialMaterials = [
-  { name: 'Water', quantity: 1000, price: 0.5 },
-  { name: 'Sugar', quantity: 500, price: 1.2 },
-  { name: 'Lemon Juice', quantity: 250, price: 2.5 },
+  { name: 'Water', quantity: 1000, price: 50 },
+  { name: 'Sugar', quantity: 500, price: 20 },
+  { name: 'Lemon Juice', quantity: 250, price: 15 },
 ];
+
+const initialProducts = [
+  { name: 'Lemonade', price: 100, materials: [{ name: 'Water', quantity: 100, price: 50 }, { name: 'Sugar', quantity: 50, price: 20 }, { name: 'Lemon Juice', quantity: 25, price: 15 }] },
+  { name: 'Ice Tea', price: 150, materials: [{ name: 'Water', quantity: 100, price: 50 }, { name: 'Tea Leaves', quantity: 50, price: 30 }, { name: 'Sugar', quantity: 25, price: 20 }] },
+];
+
 
 function Main() {
   const [materials, setMaterials] = useState(initialMaterials);
-  const [products, setProducts] = useState([]);
+  
+  const [products, setProducts] = useState(initialProducts);
 
   const handleUpdate = (updatedMaterials) => {
     setMaterials(updatedMaterials);
@@ -27,6 +34,7 @@ function Main() {
   };
   
   const handleAddProduct = (newProduct) => {
+    console.log(products)
     setProducts([...products, newProduct]);
   };
   

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import ProductForm from './productForm';
 
-function ProductList({ products, onDelete, onUpdate, onAdd, materials }) {
+function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
+  const [productsList, setProductsList] = useState(products);
 
   const handleEdit = (product) => {
     setProductToUpdate(product);
@@ -13,24 +14,18 @@ function ProductList({ products, onDelete, onUpdate, onAdd, materials }) {
   };
 
   const handleProductUpdate = (productToUpdate, updatedProduct) => {
-    const updatedProducts = products.map((product) =>
+    const updatedProducts = productsList.map((product) =>
       product === productToUpdate ? updatedProduct : product
     );
     onUpdate(updatedProducts);
     setProductToUpdate(null);
+    setProductsList(updatedProducts);
   };
 
-  const handleProductAdd = (newProduct) => {
-  console.log("Adding new product:", newProduct);
-  const isDuplicate = products.some((product) => product.name === newProduct.name);
-  if (isDuplicate) {
-    alert('Product already exists!');
-    return;
-  }
-  onAdd(newProduct);
-  setProductToUpdate(null);
-};
-
+  const addProduct = (newProduct) => {
+    const updatedProducts = [...productsList, newProduct];
+    setProductsList(updatedProducts);
+  };
 
   const handleDelete = (productToDelete) => {
     onDelete(productToDelete);
@@ -46,26 +41,40 @@ function ProductList({ products, onDelete, onUpdate, onAdd, materials }) {
     return price;
   };
 
-  const getProductName = (materialNames) => {
-    const name = materialNames.join(', ');
-    return name;
+  const getMaterialsAsString = (materialNames) => {
+    return materialNames.join(', ');
   };
 
   return (
     <div>
       <h2>Products:</h2>
-      <ul>
-        {products.map((product) => (
-          <li key={product.name}>
-            {product.name} - ${getPriceForMaterials(product.materials)}
-            <button onClick={() => handleDelete(product)}>Delete</button>
-            <button onClick={() => handleEdit(product)}>Edit</button>
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Materials</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productsList.map((product) => (
+            <tr key={product.name}>
+              <td>{product.name}</td>
+              <td>{getMaterialsAsString(product.materials)}</td>
+              <td>${getPriceForMaterials(product.materials)}</td>
+              <td>
+                <button onClick={() => handleDelete(product)}>Delete</button>
+                <button onClick={() => handleEdit(product)}>Edit</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
       <ProductForm
         materials={materials}
-        onAdd={handleProductAdd}
+        onAdd={addProduct}
         onUpdate={handleProductUpdate}
         productToUpdate={productToUpdate}
         onCancel={handleCancel}

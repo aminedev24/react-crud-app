@@ -1,25 +1,47 @@
 import React, { useState } from 'react';
 import MaterialList from './materialList';
 
-function ProductForm({ materials, onAdd ,productToUpdate = null}) {
+function ProductForm({ materials, onAdd }) {
   const [productName, setProductName] = useState('');
-  const [productPrice, setProductPrice] = useState(0);
+  const [productPrice, setProductPrice] = useState('');
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
 
   const handleProductNameChange = (event) => {
     setProductName(event.target.value);
   };
 
   const handleProductPriceChange = (event) => {
-    setProductPrice(event.target.value);
+  const value = Number(event.target.value);
+  setProductPrice(value);
+};
+
+
+
+  const handleMaterialSelect = (event) => {
+    const selected = Array.from(event.target.selectedOptions, option => option.value);
+    setSelectedMaterials(selected);
   };
 
   const handleAddProduct = () => {
-  const totalMaterialCost = materials.reduce((acc, cur) => acc + cur.price, 0);
-  const totalProductPrice = totalMaterialCost + Number(productPriceInput);
-  onAdd({ name: productName, price: totalProductPrice });
+  console.log('productPrice:', productPrice);
+  const selectedMaterialCost = materials
+    .filter(material => selectedMaterials.includes(material.name))
+    .reduce((total, material) => {
+      return total + (material.price * material.quantity);
+    }, 0);
+  console.log('selectedMaterialCost',selectedMaterialCost)
+  const totalPrice = selectedMaterialCost + Number(productPrice);
+  
+  console.log('totalPrice',totalPrice)
+  if (typeof onAdd === 'function') {
+    console.log('onadd is a function')
+    onAdd({ name: productName, price: totalPrice });
+  }
   setProductName('');
-  setProductPrice(0);
+  setProductPrice('');
+  setSelectedMaterials([]);
 };
+
 
 
   return (
@@ -35,7 +57,14 @@ function ProductForm({ materials, onAdd ,productToUpdate = null}) {
         <input type="number" value={productPrice} onChange={handleProductPriceChange} />
       </label>
       <br />
-
+      <label>
+        Materials:
+        <select multiple value={selectedMaterials} onChange={handleMaterialSelect}>
+          {materials.map(material => (
+            <option key={material.name} value={material.name}>{material.name}</option>
+          ))}
+        </select>
+      </label>
       <br />
       <button onClick={handleAddProduct}>Add Product</button>
     </div>
