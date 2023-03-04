@@ -22,16 +22,22 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     setProductsList(updatedProducts);
   };
 
-  const addProduct = (newProduct) => {
-    const updatedProducts = [...productsList, newProduct];
+  const addProduct = (newProduct, selectedMaterials) => {
+    const updatedProduct = { ...newProduct, materials: selectedMaterials };
+    const updatedProducts = [...productsList, updatedProduct];
     setProductsList(updatedProducts);
   };
+  
 
   const handleDelete = (productToDelete) => {
     onDelete(productToDelete);
   };
 
   const getPriceForMaterials = (materialNames) => {
+    if (!Array.isArray(materialNames)) {
+      return 0;
+    }
+  
     const selectedMaterials = materials.filter((material) =>
       materialNames.includes(material.name)
     );
@@ -41,10 +47,27 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     return price;
   };
 
-  const getMaterialsAsString = (materialNames) => {
-    return materialNames.join(', ');
+  const getMaterialsAsString = (selectedMaterials) => {
+    if (!selectedMaterials) {
+      return products;
+    }
+  
+    const selectedMaterialNames = Object.keys(selectedMaterials).filter(
+      (materialName) => selectedMaterials[materialName]
+    );
+  
+    if (!Array.isArray(selectedMaterialNames) || selectedMaterialNames.length === 0) {
+      return ;
+    }
+  
+    return selectedMaterialNames.join(', ');
   };
-
+  
+  
+  
+  
+  
+  
   return (
     <div>
       <h2>Products:</h2>
@@ -58,27 +81,38 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
           </tr>
         </thead>
         <tbody>
-          {productsList.map((product) => (
-            <tr key={product.name}>
-              <td>{product.name}</td>
-              <td>{getMaterialsAsString(product.materials)}</td>
-              <td>${getPriceForMaterials(product.materials)}</td>
-              <td>
-                <button onClick={() => handleDelete(product)}>Delete</button>
-                <button onClick={() => handleEdit(product)}>Edit</button>
-              </td>
-            </tr>
-          ))}
+        {productsList.map((product) => {
+  const allMaterials = [...initialMaterials, ...product.materials];
+  const selectedMaterialIds = Object.keys(product.selectedMaterials).filter(
+    (materialId) => product.selectedMaterials[materialId]
+  );
+  const selectedMaterials = selectedMaterialIds.map(
+    (materialId) => allMaterials.find((material) => material.id === materialId)
+  );
+  return (
+    <tr key={product.name}>
+      <td>{product.name}</td>
+      <td>{getMaterialsAsString(allMaterials, selectedMaterials)}</td>
+      <td>${getPriceForMaterials(allMaterials)}</td>
+      <td>
+        <button onClick={() => handleDelete(product)}>Delete</button>
+        <button onClick={() => handleEdit(product)}>Edit</button>
+      </td>
+    </tr>
+  );
+})}
+
         </tbody>
       </table>
 
       <ProductForm
         materials={materials}
-        onAdd={addProduct}
+        onAdd={(newProduct, selectedMaterials) => addProduct(newProduct, selectedMaterials)}
         onUpdate={handleProductUpdate}
         productToUpdate={productToUpdate}
         onCancel={handleCancel}
       />
+
     </div>
   );
 }

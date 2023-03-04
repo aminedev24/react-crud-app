@@ -4,6 +4,7 @@ import MaterialForm from './materialForm';
 import MaterialList from './materialList';
 import ProductForm from './productForm'
 import ProductList from './productList';
+
 const initialMaterials = [
   { name: 'Water', quantity: 1000, price: 50 },
   { name: 'Sugar', quantity: 500, price: 20 },
