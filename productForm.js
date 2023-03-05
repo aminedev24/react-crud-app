@@ -4,45 +4,64 @@ import MaterialList from './materialList';
 function ProductForm({ materials, onAdd }) {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
-  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [selectedMaterials, setSelectedMaterials] = useState({});
+  const [materialQuantities, setMaterialQuantities] = useState({});
 
   const handleProductNameChange = (event) => {
     setProductName(event.target.value);
   };
 
   const handleProductPriceChange = (event) => {
-  const value = Number(event.target.value);
-  setProductPrice(value);
-};
-
-
+    const value = Number(event.target.value);
+    setProductPrice(value);
+  };
 
   const handleMaterialSelect = (event) => {
-    const selected = Array.from(event.target.selectedOptions, option => option.value);
-    setSelectedMaterials(selected);
+    const selectedMaterial = event.target.value;
+    setSelectedMaterials((prevSelectedMaterials) => ({
+      ...prevSelectedMaterials,
+      [selectedMaterial]: true,
+    }));
+    setMaterialQuantities((prevMaterialQuantities) => ({
+      ...prevMaterialQuantities,
+      [selectedMaterial]: 1,
+    }));
+  };
+
+  const handleMaterialQuantityChange = (event, materialName) => {
+    const quantity = Number(event.target.value);
+    setMaterialQuantities((prevMaterialQuantities) => ({
+      ...prevMaterialQuantities,
+      [materialName]: quantity,
+    }));
   };
 
   const handleAddProduct = () => {
-  console.log('productPrice:', productPrice);
-  const selectedMaterialCost = materials
-    .filter(material => selectedMaterials.includes(material.name))
-    .reduce((total, material) => {
-      return total + (material.price * material.quantity);
+    const selectedMaterialNames = Object.keys(selectedMaterials).filter((materialName) => selectedMaterials[materialName]);
+    const selectedMaterialCost = selectedMaterialNames.reduce((total, materialName) => {
+      const material = materials.find((m) => m.name === materialName);
+      const quantity = materialQuantities[materialName];
+      return total + material.price * quantity;
     }, 0);
-  console.log('selectedMaterialCost',selectedMaterialCost)
-  const totalPrice = selectedMaterialCost + Number(productPrice);
   
-  console.log('totalPrice',totalPrice)
-  if (typeof onAdd === 'function') {
-    console.log('onadd is a function')
-    onAdd({ name: productName, price: totalPrice });
-  }
-  setProductName('');
-  setProductPrice('');
-  setSelectedMaterials([]);
-};
-
-
+    const totalPrice = selectedMaterialCost + Number(productPrice);
+  
+    if (typeof onAdd === 'function') {
+      onAdd({
+        name: productName,
+        price: totalPrice,
+        materials: selectedMaterials, // pass selectedMaterials object
+      }, selectedMaterials); // pass selectedMaterials object
+    }
+    
+    setProductName('');
+    setProductPrice('');
+    setSelectedMaterials({});
+    setMaterialQuantities({});
+  };
+  
+  
+  
 
   return (
     <div>
@@ -59,12 +78,27 @@ function ProductForm({ materials, onAdd }) {
       <br />
       <label>
         Materials:
-        <select multiple value={selectedMaterials} onChange={handleMaterialSelect}>
-          {materials.map(material => (
-            <option key={material.name} value={material.name}>{material.name}</option>
+        <select defaultValue={[]} multiple onChange={handleMaterialSelect}>
+          {materials.map((material) => (
+            <option key={material.name} value={material.name}>
+              {material.name}
+            </option>
           ))}
         </select>
       </label>
+      <br />
+      {Object.keys(selectedMaterials).map((materialName) => (
+        <div key={materialName}>
+          <label>
+            Quantity for {materialName}:
+            <input
+              type="number"
+              value={materialQuantities[materialName] || ''}
+              onChange={(e) => handleMaterialQuantityChange(e, materialName)}
+            />
+          </label>
+        </div>
+      ))}
       <br />
       <button onClick={handleAddProduct}>Add Product</button>
     </div>
