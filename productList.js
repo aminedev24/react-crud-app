@@ -66,37 +66,21 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     onDelete(productToDelete);
   };
 
-const getPriceForProducts = () => {
+  const getPriceForProducts = () => {
   let total = 0;
-
-  initialProducts.forEach((product) => {
-    const selectedMaterials = materials.filter((material) =>
-      product.materials.some((m) => m.name === material.name)
-    );
-    const price = selectedMaterials.reduce((total, material) => {
-      const productMaterial = product.materials.find(
-        (m) => m.name === material.name
-      );
-      return total + material.price * productMaterial.quantity;
-    }, 0);
-    const productPrice = price / product.quantity;
-    total += productPrice;
-  });
-
+  
   productsList.forEach((product) => {
     const selectedMaterials = materials.filter((material) =>
       product.materials.includes(material.name)
     );
-    const price = selectedMaterials.reduce((total, material) => {
-      return total + material.price * material.quantity;
+    const price = selectedMaterials.reduce((materialTotal, material) => {
+      return materialTotal + material.price * material.quantity;
     }, 0);
     const productPrice = price / product.quantity;
     total += productPrice;
   });
-
   return total.toFixed(2);
 };
-
 
 
 
