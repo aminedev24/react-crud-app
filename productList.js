@@ -86,22 +86,23 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   
  
   const renderProducts = () => {
-    return (
-      <tbody>
-        {productsList.map((product) => (
-          <tr key={product.name}>
-            <td>{product.name}</td>
-            <td>{getMaterialsAsString(product.materials)}</td>
-            <td>${getPriceForMaterials(product.materials)}</td>
-            <td>
-              <button onClick={() => handleDelete(product)}>Delete</button>
-              <button onClick={() => handleEdit(product)}>Edit</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    );
-  };
+  return (
+    <tbody>
+      {productsList.map((product, index) => (
+        <tr key={`${product.name}-${index}`}>
+          <td>{product.name}</td>
+          <td>{getMaterialsAsString(product.materials)}</td>
+          <td>${getPriceForMaterials(product.materials)}</td>
+          <td>
+            <button onClick={() => handleDelete(product)}>Delete</button>
+            <button onClick={() => handleEdit(product)}>Edit</button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  );
+};
+
   
 
   return (
