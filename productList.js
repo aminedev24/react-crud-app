@@ -4,7 +4,7 @@ import ProductForm from './productForm';
 function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
-
+  const [materialsList, setMaterialsList] = useState(materials);
   const handleEdit = (product) => {
     setProductToUpdate(product);
   };
@@ -22,13 +22,46 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     setProductsList(updatedProducts);
   };
 
-  const addProduct = (newProduct, selectedMaterials) => {
-    const updatedProduct = { ...newProduct, materials: selectedMaterials };
-    const updatedProducts = [...productsList, updatedProduct];
-    setProductsList(updatedProducts);
+  const addProduct = (product, selectedMaterials) => {
+  //console.log(`selectedMaterials addProduct - pl: ${JSON.stringify(selectedMaterials)} `);
+
+  const selectedMaterialNames = Object.keys(selectedMaterials);
+  const materials = selectedMaterialNames.map((materialName) => ({
+    name: materialName,
+    quantity: selectedMaterials[materialName]
+  }));
+  
+  console.log(`selectedMaterialNames - addProduct -pl: `)
+  setProductsList((prevProducts) => [
+    ...prevProducts,
+    {
+      ...product,
+      id: prevProducts.length + 1,
+      materials: materials,
+    },
+  ]);
+};
+
+  
+  const getMaterialsAsString = (selectedMaterials) => {
+    if (!selectedMaterials || typeof selectedMaterials !== 'object') {
+      return '';
+    }
+    //console.log(`selectedMaterialsString: getMaterialsAsString - pl ${selectedMaterials}`)
+    const materialNamesArray = Object.values(selectedMaterials).map((material) => material.name);
+  
+    //console.log(`materialsArray - getMaterialsAsString: ${materialNamesArray}`)
+    if (materialNamesArray.length === 0) {
+      return '';
+    }
+  
+    const materialNames = materialNamesArray.join(', ');
+  
+    return materialNames;
   };
   
-
+  
+  
   const handleDelete = (productToDelete) => {
     onDelete(productToDelete);
   };
@@ -37,37 +70,40 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     if (!Array.isArray(materialNames)) {
       return 0;
     }
-  
+
     const selectedMaterials = materials.filter((material) =>
       materialNames.includes(material.name)
     );
     const price = selectedMaterials.reduce((total, material) => {
-      return total + material.price * material.quantity;
+      return total + material.price / material.quantity;
     }, 0);
     return price;
   };
 
-  const getMaterialsAsString = (selectedMaterials) => {
-    if (!selectedMaterials) {
-      return products;
-    }
   
-    const selectedMaterialNames = Object.keys(selectedMaterials).filter(
-      (materialName) => selectedMaterials[materialName]
+  
+  
+  
+ 
+  const renderProducts = () => {
+    return (
+      <tbody>
+        {productsList.map((product) => (
+          <tr key={product.name}>
+            <td>{product.name}</td>
+            <td>{getMaterialsAsString(product.materials)}</td>
+            <td>${getPriceForMaterials(product.materials)}</td>
+            <td>
+              <button onClick={() => handleDelete(product)}>Delete</button>
+              <button onClick={() => handleEdit(product)}>Edit</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
     );
-  
-    if (!Array.isArray(selectedMaterialNames) || selectedMaterialNames.length === 0) {
-      return ;
-    }
-  
-    return selectedMaterialNames.join(', ');
   };
   
-  
-  
-  
-  
-  
+
   return (
     <div>
       <h2>Products:</h2>
@@ -80,39 +116,16 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-        {productsList.map((product) => {
-  const allMaterials = [...initialMaterials, ...product.materials];
-  const selectedMaterialIds = Object.keys(product.selectedMaterials).filter(
-    (materialId) => product.selectedMaterials[materialId]
-  );
-  const selectedMaterials = selectedMaterialIds.map(
-    (materialId) => allMaterials.find((material) => material.id === materialId)
-  );
-  return (
-    <tr key={product.name}>
-      <td>{product.name}</td>
-      <td>{getMaterialsAsString(allMaterials, selectedMaterials)}</td>
-      <td>${getPriceForMaterials(allMaterials)}</td>
-      <td>
-        <button onClick={() => handleDelete(product)}>Delete</button>
-        <button onClick={() => handleEdit(product)}>Edit</button>
-      </td>
-    </tr>
-  );
-})}
-
-        </tbody>
+        {renderProducts()}
       </table>
 
       <ProductForm
         materials={materials}
-        onAdd={(newProduct, selectedMaterials) => addProduct(newProduct, selectedMaterials)}
+        onAdd={addProduct}
         onUpdate={handleProductUpdate}
         productToUpdate={productToUpdate}
         onCancel={handleCancel}
       />
-
     </div>
   );
 }

@@ -35,7 +35,7 @@ function Main() {
   };
   
   const handleAddProduct = (newProduct) => {
-    console.log(products)
+    console.log(newProduct)
     setProducts([...products, newProduct]);
   };
   
