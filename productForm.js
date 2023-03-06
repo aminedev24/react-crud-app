@@ -35,52 +35,65 @@ function ProductForm({ materials, onAdd }) {
 
 
   useEffect(() => {
-    console.log('Selected Materials:', selectedMaterials);
+    //console.log('Selected Materials:', selectedMaterials);
   }, [selectedMaterials]);
 
-  const handleMaterialQuantityChange = (event, materialName) => {
-    const quantity = Number(event.target.value);
-    setMaterialQuantities((prevMaterialQuantities) => ({
+  const handleQuantityChange = (event, materialName) => {
+  const quantity = event.target.value;
+  if (quantity === '') { // if the value is empty, set the quantity to null
+    setMaterialQuantities(prevMaterialQuantities => ({
       ...prevMaterialQuantities,
-      [materialName]: quantity,
+      [materialName]: ''
     }));
-  };
+  } else { // otherwise, set the quantity to the entered value
+    setMaterialQuantities(prevMaterialQuantities => ({
+      ...prevMaterialQuantities,
+      [materialName]: Number(quantity)
+    }));
+  }
+};
+
+
 
   const handleAddProduct = () => {
-    const selectedMaterialNames = Object.keys(selectedMaterials).filter(
-      (materialName) => selectedMaterials[materialName]
-    );
-    console.log(
-      `selectedMaterialNames handleAddProduct - productForm: ${selectedMaterialNames}`
-    );
-    const selectedMaterialCost = selectedMaterialNames.reduce(
-      (total, materialName) => {
-        const material = materials.find((m) => m.name === materialName);
-        const quantity = materialQuantities[materialName];
-        return total + material.price * quantity;
+  const selectedMaterialNames = Object.keys(selectedMaterials).filter(
+    (materialName) => selectedMaterials[materialName]
+  );
+  //onsole.log(`selectedMaterialNames handleAddProduct - productForm: ${selectedMaterialNames}`);
+  const selectedMaterialCost = selectedMaterialNames.reduce(
+    (total, materialName) => {
+      const material = materials.find((m) => m.name === materialName);
+      const quantity = materialQuantities[materialName];
+      return total + material.price * quantity;
+    },
+    0
+  );
+
+  const totalQuantity = Object.values(materialQuantities).reduce(
+    (total, quantity) => total + quantity,
+    0
+  );
+
+  const costPerUnit = selectedMaterialCost / totalQuantity;
+ 
+  const totalPrice = costPerUnit * totalQuantity;
+  console.log(totalPrice)
+  if (typeof onAdd === 'function') {
+    onAdd(
+      {
+        name: productName,
+        price: totalPrice,
+        materials: selectedMaterials,
       },
-      0
+      selectedMaterials
     );
+  }
 
-    const totalPrice = selectedMaterialCost + Number(productPrice);
-
-    if (typeof onAdd === 'function') {
-      onAdd(
-        {
-          name: productName,
-          price: totalPrice,
-          materials: selectedMaterials,
-        },
-        selectedMaterials
-      );
-    }
-
-    setProductName('');
-    setProductPrice('');
-    setSelectedMaterials({});
-    setMaterialQuantities({});
-    setSelectedOptions([]);
-  };
+  setProductName('');
+  setSelectedMaterials({});
+  setMaterialQuantities({});
+  setSelectedOptions([]);
+};
 
   return (
     <div>
@@ -122,8 +135,7 @@ function ProductForm({ materials, onAdd }) {
                 type="number"
                 value={materialQuantities[materialName]}
                 onChange={(event) => handleQuantityChange(event, materialName)}
-              min="1"
-              max="10"
+             
             />
           </label>
         </div>

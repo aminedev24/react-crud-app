@@ -31,7 +31,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     quantity: selectedMaterials[materialName]
   }));
   
-  console.log(`selectedMaterialNames - addProduct -pl: `)
+  //console.log(`selectedMaterialNames - addProduct -pl: `)
   setProductsList((prevProducts) => [
     ...prevProducts,
     {
@@ -67,6 +67,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   };
 
   const getPriceForMaterials = (materialNames) => {
+    
     if (!Array.isArray(materialNames)) {
       return 0;
     }
