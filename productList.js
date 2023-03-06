@@ -4,7 +4,7 @@ import ProductForm from './productForm';
 function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
-
+  const [materialsList, setMaterialsList] = useState(materials);
   const handleEdit = (product) => {
     setProductToUpdate(product);
   };
@@ -22,11 +22,22 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     setProductsList(updatedProducts);
   };
 
-  const addProduct = (newProduct, selectedMaterials) => {
-    const updatedProduct = { ...newProduct, materials: selectedMaterials };
-    const updatedProducts = [...productsList, updatedProduct];
-    setProductsList(updatedProducts);
+  const addProduct = (product, selectedMaterials) => {
+    
+    setProductsList((prevProducts) => [
+      ...prevProducts,
+      {
+        ...product,
+        id: prevProducts.length + 1,
+        materials: selectedMaterials,
+      },
+    ]);
   };
+  
+  
+  
+  
+  
   
 
   const handleDelete = (productToDelete) => {
@@ -37,37 +48,55 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     if (!Array.isArray(materialNames)) {
       return 0;
     }
-  
+
     const selectedMaterials = materials.filter((material) =>
       materialNames.includes(material.name)
     );
     const price = selectedMaterials.reduce((total, material) => {
-      return total + material.price * material.quantity;
+      return total + material.price / material.quantity;
     }, 0);
     return price;
   };
 
   const getMaterialsAsString = (selectedMaterials) => {
-    if (!selectedMaterials) {
-      return products;
+    if (!selectedMaterials || typeof selectedMaterials !== 'object') {
+      return '';
+    }
+    console.log(`selectedMaterials: getMaterialsAsString ${selectedMaterials}`)
+    const materialNamesArray = Object.values(selectedMaterials).map((material) => material.name);
+
+   //console.log(`materials:getMaterialsAsString ${materialNamesArray}`)
+    if (materialNamesArray.length === 0) {
+      return '';
     }
   
-    const selectedMaterialNames = Object.keys(selectedMaterials).filter(
-      (materialName) => selectedMaterials[materialName]
-    );
-  
-    if (!Array.isArray(selectedMaterialNames) || selectedMaterialNames.length === 0) {
-      return ;
-    }
-  
-    return selectedMaterialNames.join(', ');
+    const materialNames = materialNamesArray.join(', ');
+    
+    return materialNames;
   };
   
   
   
+ 
+  const renderProducts = () => {
+    return (
+      <tbody>
+        {productsList.map((product) => (
+          <tr key={product.name}>
+            <td>{product.name}</td>
+            <td>{getMaterialsAsString(product.materials)}</td>
+            <td>${getPriceForMaterials(product.materials)}</td>
+            <td>
+              <button onClick={() => handleDelete(product)}>Delete</button>
+              <button onClick={() => handleEdit(product)}>Edit</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    );
+  };
   
-  
-  
+
   return (
     <div>
       <h2>Products:</h2>
@@ -80,39 +109,16 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-        {productsList.map((product) => {
-  const allMaterials = [...initialMaterials, ...product.materials];
-  const selectedMaterialIds = Object.keys(product.selectedMaterials).filter(
-    (materialId) => product.selectedMaterials[materialId]
-  );
-  const selectedMaterials = selectedMaterialIds.map(
-    (materialId) => allMaterials.find((material) => material.id === materialId)
-  );
-  return (
-    <tr key={product.name}>
-      <td>{product.name}</td>
-      <td>{getMaterialsAsString(allMaterials, selectedMaterials)}</td>
-      <td>${getPriceForMaterials(allMaterials)}</td>
-      <td>
-        <button onClick={() => handleDelete(product)}>Delete</button>
-        <button onClick={() => handleEdit(product)}>Edit</button>
-      </td>
-    </tr>
-  );
-})}
-
-        </tbody>
+        {renderProducts()}
       </table>
 
       <ProductForm
         materials={materials}
-        onAdd={(newProduct, selectedMaterials) => addProduct(newProduct, selectedMaterials)}
+        onAdd={addProduct}
         onUpdate={handleProductUpdate}
         productToUpdate={productToUpdate}
         onCancel={handleCancel}
       />
-
     </div>
   );
 }
