@@ -6,15 +6,41 @@ import ProductForm from './productForm'
 import ProductList from './productList';
 
 const initialMaterials = [
-  { name: 'Water', quantity: 1000, price: 50 },
+  { name: 'Water', quantity: 1000, price: 300 },
   { name: 'Sugar', quantity: 500, price: 20 },
   { name: 'Lemon Juice', quantity: 250, price: 15 },
 ];
 
 const initialProducts = [
-  { name: 'Lemonade', price: 100, materials: [{ name: 'Water', quantity: 100, price: 50 }, { name: 'Sugar', quantity: 50, price: 20 }, { name: 'Lemon Juice', quantity: 25, price: 15 }] },
-  { name: 'Ice Tea', price: 150, materials: [{ name: 'Water', quantity: 100, price: 50 }, { name: 'Tea Leaves', quantity: 50, price: 30 }, { name: 'Sugar', quantity: 25, price: 20 }] },
+  {
+    name: 'Lemonade',
+    materials: [
+      { name: 'Water', quantity: 1000, price: 300},
+      { name: 'Sugar', quantity: 50, price: 20 },
+      { name: 'Lemon Juice', quantity: 25, price: 15 }
+    ],
+    price: 0 // add a price property with an initial value of 0
+  },
+  {
+    name: 'Ice Tea',
+    materials: [
+      { name: 'Water', quantity: 100, price: 50 },
+      { name: 'Tea Leaves', quantity: 50, price: 30 },
+      { name: 'Sugar', quantity: 25, price: 20 }
+    ],
+    price: 0 // add a price property with an initial value of 0
+  }
 ];
+
+// calculate the product prices based on the materials' prices and quantities
+initialProducts.forEach(product => {
+  const totalPrice = product.materials.reduce((acc, material) => {
+    return acc + (material.quantity * material.price);
+  }, 0);
+
+  product.price = totalPrice;
+});
+
 
 
 function Main() {

@@ -66,20 +66,39 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     onDelete(productToDelete);
   };
 
-  const getPriceForMaterials = (materialNames) => {
-    
-    if (!Array.isArray(materialNames)) {
-      return 0;
-    }
+const getPriceForProducts = () => {
+  let total = 0;
 
+  initialProducts.forEach((product) => {
     const selectedMaterials = materials.filter((material) =>
-      materialNames.includes(material.name)
+      product.materials.some((m) => m.name === material.name)
     );
     const price = selectedMaterials.reduce((total, material) => {
-      return total + material.price / material.quantity;
+      const productMaterial = product.materials.find(
+        (m) => m.name === material.name
+      );
+      return total + material.price * productMaterial.quantity;
     }, 0);
-    return price;
-  };
+    const productPrice = price / product.quantity;
+    total += productPrice;
+  });
+
+  productsList.forEach((product) => {
+    const selectedMaterials = materials.filter((material) =>
+      product.materials.includes(material.name)
+    );
+    const price = selectedMaterials.reduce((total, material) => {
+      return total + material.price * material.quantity;
+    }, 0);
+    const productPrice = price / product.quantity;
+    total += productPrice;
+  });
+
+  return total.toFixed(2);
+};
+
+
+
 
   
   
@@ -93,7 +112,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
         <tr key={`${product.name}-${index}`}>
           <td>{product.name}</td>
           <td>{getMaterialsAsString(product.materials)}</td>
-          <td>${getPriceForMaterials(product.materials)}</td>
+          <td>${getPriceForProducts(product.materials)}</td>
           <td>
             <button onClick={() => handleDelete(product)}>Delete</button>
             <button onClick={() => handleEdit(product)}>Edit</button>

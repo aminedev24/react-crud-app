@@ -77,7 +77,7 @@ function ProductForm({ materials, onAdd }) {
   const costPerUnit = selectedMaterialCost / totalQuantity;
  
   const totalPrice = costPerUnit * totalQuantity;
-  console.log(totalPrice)
+  //console.log(totalPrice)
   if (typeof onAdd === 'function') {
     onAdd(
       {
