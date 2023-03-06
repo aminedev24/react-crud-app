@@ -18,16 +18,21 @@ function ProductForm({ materials, onAdd }) {
   };
 
   const handleMaterialSelect = (event) => {
-    const selectedMaterial = event.target.value;
-    setSelectedMaterials((prevSelectedMaterials) => ({
-      ...prevSelectedMaterials,
-      [selectedMaterial]: true,
-    }));
-    setMaterialQuantities((prevMaterialQuantities) => ({
-      ...prevMaterialQuantities,
-      [selectedMaterial]: 1,
-    }));
-  };
+  const options = event.target.options;
+  const selectedMaterials = {};
+  const selectedQuantities = {};
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    if (option.selected) {
+      const materialName = option.value;
+      selectedMaterials[materialName] = true;
+      selectedQuantities[materialName] = 1;
+    }
+  }
+  setSelectedMaterials(selectedMaterials);
+  setMaterialQuantities(selectedQuantities);
+};
+
 
   useEffect(() => {
     console.log('Selected Materials:', selectedMaterials);
