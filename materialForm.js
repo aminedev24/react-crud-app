@@ -47,7 +47,7 @@ function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateFor
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form className='add-material-form' onSubmit={handleFormSubmit}>
       <h3>{isUpdateForm ? 'Update Material' : 'Add Material'}</h3>
       <div>
         <label htmlFor="name">Name:</label>

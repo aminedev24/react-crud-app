@@ -43,22 +43,24 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
 };
 
   
-  const getMaterialsAsString = (selectedMaterials) => {
-    if (!selectedMaterials || typeof selectedMaterials !== 'object') {
-      return '';
-    }
-    //console.log(`selectedMaterialsString: getMaterialsAsString - pl ${selectedMaterials}`)
-    const materialNamesArray = Object.values(selectedMaterials).map((material) => material.name);
+const getMaterialsAsString = (selectedMaterials) => {
+  if (!selectedMaterials || typeof selectedMaterials !== 'object') {
+    return '';
+  }
+
+  const materialsArray = Object.values(selectedMaterials).map((material) => `${material.quantity} (${material.name})`);
   
-    //console.log(`materialsArray - getMaterialsAsString: ${materialNamesArray}`)
-    if (materialNamesArray.length === 0) {
-      return '';
-    }
+  if (materialsArray.length === 0) {
+    return '';
+  }
   
-    const materialNames = materialNamesArray.join(', ');
-  
-    return materialNames;
-  };
+  const materialNames = materialsArray.join(', ');
+
+  return <span className="material-list">{materialNames}</span>;
+};
+
+
+
   
   
   
@@ -67,20 +69,21 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   };
 
   const getPriceForProducts = () => {
-  let total = 0;
-  
+  const result = [];
   productsList.forEach((product) => {
-    const selectedMaterials = materials.filter((material) =>
-      product.materials.includes(material.name)
-    );
+    const selectedMaterials = materials.filter((material) => product.materials.includes(material.name));
     const price = selectedMaterials.reduce((materialTotal, material) => {
       return materialTotal + material.price * material.quantity;
     }, 0);
     const productPrice = price / product.quantity;
-    total += productPrice;
+    result.push({
+      name: product.name,
+      price: productPrice.toFixed(2)
+    });
   });
-  return total.toFixed(2);
+  return result;
 };
+
 
 
 
@@ -89,14 +92,14 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   
   
  
-  const renderProducts = () => {
+const renderProducts = () => {
   return (
     <tbody>
       {productsList.map((product, index) => (
         <tr key={`${product.name}-${index}`}>
           <td>{product.name}</td>
           <td>{getMaterialsAsString(product.materials)}</td>
-          <td>${getPriceForProducts(product.materials)}</td>
+          <td>${product.price.toFixed(2)}</td>
           <td>
             <button onClick={() => handleDelete(product)}>Delete</button>
             <button onClick={() => handleEdit(product)}>Edit</button>
@@ -106,6 +109,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     </tbody>
   );
 };
+
 
   
 

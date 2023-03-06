@@ -96,7 +96,7 @@ function ProductForm({ materials, onAdd }) {
 };
 
   return (
-    <div>
+    <div className='add-product-form'>
       <h2>Create a new product:</h2>
       <label>
         Product name:
