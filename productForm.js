@@ -3,7 +3,7 @@ import MaterialList from './materialList';
 
 function ProductForm({ materials, onAdd }) {
   const [productName, setProductName] = useState('');
-  const [productPrice, setProductPrice] = useState('');
+  const [produtQyanitity, setprodutQyanitity] = useState('');
   const [selectedMaterials, setSelectedMaterials] = useState({});
   const [materialQuantities, setMaterialQuantities] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -12,9 +12,9 @@ function ProductForm({ materials, onAdd }) {
     setProductName(event.target.value);
   };
 
-  const handleProductPriceChange = (event) => {
+  const handleprodutQyanitityChange = (event) => {
     const value = Number(event.target.value);
-    setProductPrice(value);
+    setprodutQyanitity(value);
   };
 
   const handleMaterialSelect = (event) => {
@@ -59,7 +59,7 @@ function ProductForm({ materials, onAdd }) {
   const selectedMaterialNames = Object.keys(selectedMaterials).filter(
     (materialName) => selectedMaterials[materialName]
   );
-  //onsole.log(`selectedMaterialNames handleAddProduct - productForm: ${selectedMaterialNames}`);
+
   const selectedMaterialCost = selectedMaterialNames.reduce(
     (total, materialName) => {
       const material = materials.find((m) => m.name === materialName);
@@ -75,25 +75,26 @@ function ProductForm({ materials, onAdd }) {
   );
 
   const costPerUnit = selectedMaterialCost / totalQuantity;
- 
   const totalPrice = costPerUnit * totalQuantity;
-  //console.log(totalPrice)
+
   if (typeof onAdd === 'function') {
-    onAdd(
-      {
+      onAdd({
         name: productName,
-        price: totalPrice,
+        price: costPerUnit.toFixed(2),
+        quantity: produtQyanitity,
         materials: selectedMaterials,
-      },
-      selectedMaterials
-    );
-  }
+        materialQuantities: materialQuantities // pass the material quantities
+      }, selectedMaterials);
+    }
+
 
   setProductName('');
+  setprodutQyanitity('');
   setSelectedMaterials({});
   setMaterialQuantities({});
   setSelectedOptions([]);
 };
+
 
   return (
     <div className='add-product-form'>
@@ -104,8 +105,8 @@ function ProductForm({ materials, onAdd }) {
       </label>
       <br />
       <label>
-        Product price:
-        <input type="number" value={productPrice} onChange={handleProductPriceChange} />
+        Product quantity:
+        <input type="number" value={produtQyanitity} onChange={handleprodutQyanitityChange} />
       </label>
       <br />
       <label>

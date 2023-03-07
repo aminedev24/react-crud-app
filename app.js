@@ -19,6 +19,7 @@ const initialProducts = [
       { name: 'Sugar', quantity: 50, price: 20 },
       { name: 'Lemon Juice', quantity: 25, price: 15 }
     ],
+    quantity :10,
     price: 0 // add a price property with an initial value of 0
   },
   {
@@ -28,6 +29,7 @@ const initialProducts = [
       { name: 'Tea Leaves', quantity: 50, price: 30 },
       { name: 'Sugar', quantity: 25, price: 20 }
     ],
+    quantity: 20,
     price: 0 // add a price property with an initial value of 0
   }
 ];

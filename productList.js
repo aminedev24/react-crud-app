@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import ProductForm from './productForm';
 
 function ProductList({ products, onDelete, onUpdate, materials }) {
+  
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
+  
+  //console.log('productsList:', productsList);
   const [materialsList, setMaterialsList] = useState(materials);
+  
   const handleEdit = (product) => {
     setProductToUpdate(product);
   };
@@ -23,95 +27,64 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   };
 
   const addProduct = (product, selectedMaterials) => {
-  //console.log(`selectedMaterials addProduct - pl: ${JSON.stringify(selectedMaterials)} `);
-
-  const selectedMaterialNames = Object.keys(selectedMaterials);
-  const materials = selectedMaterialNames.map((materialName) => ({
-    name: materialName,
-    quantity: selectedMaterials[materialName]
+  const materials = selectedMaterials.map((material) => ({
+    name: material.name,
+    quantity: material.quantity,
   }));
   
-  //console.log(`selectedMaterialNames - addProduct -pl: `)
+  const newProduct = {
+    id: productsList.length + 1,
+    name: product.name,
+    materials: materials,
+    quantity: product.quantity,
+    price: product.price,
+  };
+  console.log(newProduct)
   setProductsList((prevProducts) => [
     ...prevProducts,
-    {
-      ...product,
-      id: prevProducts.length + 1,
-      materials: materials,
-    },
+    newProduct,
   ]);
 };
 
-  
+
 const getMaterialsAsString = (selectedMaterials) => {
   if (!selectedMaterials || typeof selectedMaterials !== 'object') {
     return '';
   }
 
-  const materialsArray = Object.values(selectedMaterials).map((material) => `${material.quantity} (${material.name})`);
-  
+  const materialsArray = Object.values(selectedMaterials).map((material) => `${material.quantity} ${material.name}`);
+    
   if (materialsArray.length === 0) {
     return '';
   }
-  
+    
   const materialNames = materialsArray.join(', ');
 
   return <span className="material-list">{materialNames}</span>;
 };
 
+  const renderProducts = () => {
+    return (
+      <tbody>
+        {productsList.map((product, index) => (
+          <tr key={`${product.name}-${index}`}>
+            <td>{product.name}</td>
+            <td>{getMaterialsAsString(product.materials)}</td>
+            <td>{product.quantity}</td>
+            <td>${product.price.toFixed(2)}</td>
+            <td>
+              <button onClick={() => handleDelete(product)}>Delete</button>
+              <button onClick={() => handleEdit(product)}>Edit</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    );
+  };
 
-
-  
-  
-  
   const handleDelete = (productToDelete) => {
     onDelete(productToDelete);
   };
-
-  const getPriceForProducts = () => {
-  const result = [];
-  productsList.forEach((product) => {
-    const selectedMaterials = materials.filter((material) => product.materials.includes(material.name));
-    const price = selectedMaterials.reduce((materialTotal, material) => {
-      return materialTotal + material.price * material.quantity;
-    }, 0);
-    const productPrice = price / product.quantity;
-    result.push({
-      name: product.name,
-      price: productPrice.toFixed(2)
-    });
-  });
-  return result;
-};
-
-
-
-
-  
-  
-  
-  
- 
-const renderProducts = () => {
-  return (
-    <tbody>
-      {productsList.map((product, index) => (
-        <tr key={`${product.name}-${index}`}>
-          <td>{product.name}</td>
-          <td>{getMaterialsAsString(product.materials)}</td>
-          <td>${product.price.toFixed(2)}</td>
-          <td>
-            <button onClick={() => handleDelete(product)}>Delete</button>
-            <button onClick={() => handleEdit(product)}>Edit</button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  );
-};
-
-
-  
 
   return (
     <div>
@@ -121,6 +94,7 @@ const renderProducts = () => {
           <tr>
             <th>Name</th>
             <th>Materials</th>
+            <th>Quantity</th>
             <th>Price</th>
             <th>Actions</th>
           </tr>
@@ -129,12 +103,13 @@ const renderProducts = () => {
       </table>
 
       <ProductForm
-        materials={materials}
-        onAdd={addProduct}
-        onUpdate={handleProductUpdate}
-        productToUpdate={productToUpdate}
-        onCancel={handleCancel}
-      />
+      materials={materialsList}
+      onAdd={addProduct}
+      onUpdate={handleProductUpdate}
+      productToUpdate={productToUpdate}
+      onCancel={handleCancel}
+/>
+
     </div>
   );
 }
