@@ -34,10 +34,10 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
   };
 
   return (
-<div>
+<div className='table-responsive'>
   <h2>Materials:</h2>
-  <table>
-    <thead>
+  <table className='table table-bordered'>
+    <thead className='table-dark'>
       <tr>
         <th>Name</th>
         <th>Quantity (ml)</th>

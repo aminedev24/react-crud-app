@@ -90,9 +90,9 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   };
 
   return (
-    <div>
+    <div className='table-responsive'>
       <h2>Products:</h2>
-      <table>
+      <table className='table table-bordered'>
         <thead>
           <tr>
             <th>Name</th>
