@@ -62,7 +62,7 @@ function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateFor
         <input type="number" id="price" value={price} onChange={handlePriceChange} required />
       </div>
       <div>
-        <button type="submit" disabled={!isFormValid}>
+        <button className='btn btn-info ' type="submit" disabled={!isFormValid}>
           {isUpdateForm ? 'Update' : 'Add'}
         </button>
         <button type="button" onClick={onCancel}>

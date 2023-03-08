@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import ProductForm from './productForm';
 
 function ProductList({ products, onDelete, onUpdate, materials }) {
-  
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
-  
-  //console.log('productsList:', productsList);
   const [materialsList, setMaterialsList] = useState(materials);
-  
+
   const handleEdit = (product) => {
     setProductToUpdate(product);
   };
@@ -26,42 +23,50 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     setProductsList(updatedProducts);
   };
 
-  const addProduct = (product, selectedMaterials) => {
-  const materials = selectedMaterials.map((material) => ({
-    name: material.name,
-    quantity: material.quantity,
-  }));
-  
-  const newProduct = {
-    id: productsList.length + 1,
-    name: product.name,
-    materials: materials,
-    quantity: product.quantity,
-    price: product.price,
+  const handleProductDelete = (productToDelete) => {
+    const updatedProducts = productsList.filter(
+      (product) => product !== productToDelete
+    );
+    onDelete(updatedProducts);
+    setProductsList(updatedProducts);
   };
-  console.log(newProduct)
-  setProductsList((prevProducts) => [
-    ...prevProducts,
-    newProduct,
-  ]);
-};
 
+  const handleProductAdd = (product, selectedMaterials) => {
+    const materials = Array.isArray(selectedMaterials)
+      ? selectedMaterials.map((material) => ({
+          name: material.name,
+          quantity: material.quantity,
+        }))
+      : [];
+    console.log(materials.quantity)
+    const newProduct = {
+      id: productsList.length + 1,
+      name: product.name,
+      materials: materials,
+      quantity: product.quantity,
+      price: product.price,
+    };
 
-const getMaterialsAsString = (selectedMaterials) => {
-  if (!selectedMaterials || typeof selectedMaterials !== 'object') {
-    return '';
-  }
+    setProductsList((prevProducts) => [...prevProducts, newProduct]);
+  };
 
-  const materialsArray = Object.values(selectedMaterials).map((material) => `${material.quantity} ${material.name}`);
+  const getMaterialsAsString = (selectedMaterials) => {
+    if (!selectedMaterials || typeof selectedMaterials !== 'object') {
+      return '';
+    }
     
-  if (materialsArray.length === 0) {
-    return '';
-  }
-    
-  const materialNames = materialsArray.join(', ');
+    const materialsArray = Object.values(selectedMaterials).map(
+      (material) => `${material.quantity} ${material.name}`
+    );
+    console.log(materialsArray,'materialsArray')
+    if (materialsArray.length === 0) {
+      return '';
+    }
 
-  return <span className="material-list">{materialNames}</span>;
-};
+    const materialNames = materialsArray.join(', ');
+
+    return <span className="material-list">{materialNames}</span>;
+  };
 
   const renderProducts = () => {
     return (
@@ -71,19 +76,17 @@ const getMaterialsAsString = (selectedMaterials) => {
             <td>{product.name}</td>
             <td>{getMaterialsAsString(product.materials)}</td>
             <td>{product.quantity}</td>
-            <td>${product.price.toFixed(2)}</td>
+            <td>{product.price}</td>
             <td>
-              <button onClick={() => handleDelete(product)}>Delete</button>
-              <button onClick={() => handleEdit(product)}>Edit</button>
+              <button className='btn btn-danger btn-sm' onClick={() => handleProductDelete(product)}>
+                Delete
+              </button>
+              <button className='btn btn-info btn-sm' onClick={() => handleEdit(product)}>Edit</button>
             </td>
           </tr>
         ))}
       </tbody>
     );
-  };
-
-  const handleDelete = (productToDelete) => {
-    onDelete(productToDelete);
   };
 
   return (
@@ -103,13 +106,12 @@ const getMaterialsAsString = (selectedMaterials) => {
       </table>
 
       <ProductForm
-      materials={materialsList}
-      onAdd={addProduct}
-      onUpdate={handleProductUpdate}
-      productToUpdate={productToUpdate}
-      onCancel={handleCancel}
-/>
-
+        materials={materialsList}
+        onAdd={handleProductAdd}
+        onUpdate={handleProductUpdate}
+        productToUpdate={productToUpdate}
+        onCancel={handleCancel}
+      />
     </div>
   );
 }

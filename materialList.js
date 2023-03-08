@@ -52,8 +52,8 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
           <td>{material.quantity}</td>
           <td>{material.price}</td>
           <td>
-            <button onClick={() => onDelete(material)}>Delete</button>
-            <button onClick={() => handleEdit(material)}>Edit</button>
+            <button className='btn btn-sm btn-danger' onClick={() => onDelete(material)}>Delete</button>
+            <button className='btn btn-sm btn-info' onClick={() => handleEdit(material)}>Edit</button>
           </td>
         </tr>
       ))}
