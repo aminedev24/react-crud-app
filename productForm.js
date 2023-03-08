@@ -105,24 +105,25 @@ function ProductForm({ materials, onAdd }) {
     setMaterialQuantities({});
   };
 
+console.log(materials,'productform')
   return (
     <div className="add-product-form">
       <h2>Create a new product:</h2>
       <label>
         Product name:
-        <input type="text" value={productName} onChange={handleProductNameChange} />
+        <input required type="text" value={productName} onChange={handleProductNameChange} />
       </label>
       <br />
       <label>
         Quantity:
-        <input type="number" value={productQuantity} onChange={handleProductQuantityChange} />
+        <input required type="number" value={productQuantity} onChange={handleProductQuantityChange} />
       </label>
       <br />
       <label>
         Materials:
         <select multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
           {materials.map((material) => (
-            <option key={material.name} value={material.name}>
+            <option required key={material.name} value={material.name}>
               {material.name}
             </option>
           ))}

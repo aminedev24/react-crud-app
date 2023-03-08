@@ -37,7 +37,7 @@ const initialProducts = [
 // calculate the product prices based on the materials' prices and quantities
 initialProducts.forEach(product => {
   const totalPrice = product.materials.reduce((acc, material) => {
-    return acc + (material.quantity * material.price);
+    return acc + (material.quantity * material.price / product.quantity);
   }, 0);
 
   product.price = totalPrice;
@@ -63,7 +63,7 @@ function Main() {
   };
   
   const handleAddProduct = (newProduct) => {
-    console.log(newProduct)
+    //console.log(newProduct)
     setProducts([...products, newProduct]);
   };
   

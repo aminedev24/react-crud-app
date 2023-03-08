@@ -5,7 +5,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
   const [materialsList, setMaterialsList] = useState(materials);
-
+//console.log(materials,'productsList')
   const handleEdit = (product) => {
     setProductToUpdate(product);
   };
@@ -56,7 +56,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     }
     
     const materialsArray = Object.values(selectedMaterials).map(
-      (material) => `${material.quantity} ${material.name}`
+      (material) => `(${material.quantity}) ${material.name}`
     );
     
     if (materialsArray.length === 0) {
@@ -106,7 +106,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
       </table>
 
       <ProductForm
-        materials={materialsList}
+        materials={materials}
         onAdd={handleProductAdd}
         onUpdate={handleProductUpdate}
         productToUpdate={productToUpdate}

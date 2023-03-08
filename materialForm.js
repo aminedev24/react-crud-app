@@ -36,6 +36,7 @@ function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateFor
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const newMaterial = { name, quantity, price };
+    
     if (isUpdateForm) {
       onUpdate(materialToUpdate, newMaterial);
     } else {
