@@ -83,7 +83,7 @@ function ProductForm({ materials, onAdd }) {
     }, 0);
 
     const totalQuantity = Object.values(materialQuantities).reduce((total, quantity) => total + Number(quantity), 0);
-
+    console.log(totalQuantity)
     const costPerUnit = selectedMaterialCost / productQuantity;
 
     if (typeof onAdd === "function") {

@@ -6,7 +6,7 @@ import ProductForm from './productForm'
 import ProductList from './productList';
 
 const initialMaterials = [
-  { name: 'Water', quantity: 1000, price: 300 },
+  { name: 'Water', quantity: 1000, price: 5 },
   { name: 'Sugar', quantity: 500, price: 20 },
   { name: 'Lemon Juice', quantity: 250, price: 15 },
 ];

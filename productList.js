@@ -38,7 +38,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
           quantity: material.quantity,
         }))
       : [];
-    console.log(materials.quantity)
+    
     const newProduct = {
       id: productsList.length + 1,
       name: product.name,
@@ -58,7 +58,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     const materialsArray = Object.values(selectedMaterials).map(
       (material) => `${material.quantity} ${material.name}`
     );
-    console.log(materialsArray,'materialsArray')
+    
     if (materialsArray.length === 0) {
       return '';
     }
@@ -93,7 +93,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     <div className='table-responsive'>
       <h2>Products:</h2>
       <table className='table table-bordered'>
-        <thead>
+        <thead className='table-dark'>
           <tr>
             <th>Name</th>
             <th>Materials</th>
