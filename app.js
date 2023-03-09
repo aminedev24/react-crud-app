@@ -4,6 +4,7 @@ import MaterialForm from './materialForm';
 import MaterialList from './materialList';
 import ProductForm from './productForm';
 import ProductList from './productList';
+import ProductQuantityForm from './productQuantityForm';
 
 const initialMaterials = [
   { name: 'Water', quantity: 1000, price: 5 },
@@ -77,14 +78,15 @@ function App() {
 
   return (
     <div>
-    
-      <button className={`custom-btn-1 ${showMaterialList ? 'active' : ''}`}onClick={() => setShowMaterialList(true)}>
-       Materials
-      </button> 
-      <button className = { `custom-btn-1 ${!showMaterialList ? 'active' : ''}` }
-      onClick = {() => setShowMaterialList(false) } >
-        Products
-      </button>
+        <div className='btn-container'>
+          <button className={`custom-btn-1 ${showMaterialList ? 'active' : ''}`}onClick={() => setShowMaterialList(true)}>
+          Materials
+          </button> 
+          <button className = { `custom-btn-1 ${!showMaterialList ? 'active' : ''}` }
+          onClick = {() => setShowMaterialList(false) } >
+            Products
+          </button>
+        </div>
       {showMaterialList ? (
         <MaterialList
           materials={materials}
@@ -101,7 +103,10 @@ function App() {
           materials={materials}
         />
       )}
+      <ProductQuantityForm products={products} />
     </div>
+
+    
   );
 }
 
