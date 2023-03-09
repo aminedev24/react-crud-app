@@ -3,11 +3,15 @@ import React, { useState, useEffect } from "react";
 function ProductForm({ materials, onAdd }) {
    const [productName, setProductName] = useState("");
 
+   const [selectedOptions, setSelectedOptions] = useState([]);
+   
    const [productQuantity, setProductQuantity] = useState("");
 
    const [selectedMaterials, setSelectedMaterials] = useState([]);
 
    const [materialQuantities, setMaterialQuantities] = useState({});
+
+   const [materialInputs, setMaterialInputs] = useState({});
 
    const [formErrors, setFormErrors] = useState({});
 
@@ -33,39 +37,40 @@ function ProductForm({ materials, onAdd }) {
 
    const handleMaterialSelect = (event) => {
       const options = event.target.options;
-
       const newSelectedMaterials = [];
-
       const newMaterialQuantities = { ...materialQuantities };
-
+    
       for (let i = 0; i < options.length; i++) {
-         const option = options[i];
-
-         if (option.selected) {
-            const materialName = option.value;
-
-            newSelectedMaterials.push(materialName);
-
-            if (!newMaterialQuantities[materialName]) {
-               newMaterialQuantities[materialName] = materials.find((m) => m.name === materialName).defaultQuantity;
-            }
-         } else {
-            const materialName = option.value;
-
-            const index = newSelectedMaterials.indexOf(materialName);
-
-            if (index > -1) {
-               newSelectedMaterials.splice(index, 1);
-
-               delete newMaterialQuantities[materialName];
-            }
-         }
+        const option = options[i];
+    
+        if (option.selected) {
+          const materialName = option.value;
+    
+          newSelectedMaterials.push(materialName);
+    
+          if (!newMaterialQuantities[materialName]) {
+            newMaterialQuantities[materialName] = materials.find((m) => m.name === materialName).defaultQuantity;
+          }
+        } else {
+          const materialName = option.value;
+          const index = newSelectedMaterials.indexOf(materialName);
+    
+          if (index > -1) {
+            newSelectedMaterials.splice(index, 1);
+            delete newMaterialQuantities[materialName];
+          }
+        }
       }
-
+      
       setSelectedMaterials(newSelectedMaterials);
-
       setMaterialQuantities(newMaterialQuantities);
-   };
+      setMaterialInputs({});
+    };
+    
+   
+    
+
+    
 
    useEffect(() => {
       setFormErrors({});
@@ -171,7 +176,7 @@ function ProductForm({ materials, onAdd }) {
          <div>
             <label htmlFor="materials">Materials:</label>
 
-            <select id="materials" multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
+            <select className="form-control"  id="materials" multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
                {materials.map((material) => (
                   <option key={material.name} value={material.name}>
                      {material.name}
@@ -179,7 +184,8 @@ function ProductForm({ materials, onAdd }) {
                ))}
             </select>
 
-            {formErrors.materials && typeof formErrors.materials === "string" && <p  className='error-message'>{formErrors.materials}</p>}
+            {formErrors.materials && typeof formErrors.materials === "string" && 
+            <p className='error-message'>{formErrors.materials}</p>}
 
             {formErrors.materials && typeof formErrors.materials === "object" && (
                <ul>
@@ -193,14 +199,21 @@ function ProductForm({ materials, onAdd }) {
          </div>
 
          {selectedMaterials.map((materialName) => (
-            <div key={materialName}>
-               <label htmlFor={`quantity-${materialName}`}>{materialName} Quantity:</label>
+  <div key={materialName}>
+    <label htmlFor={`quantity-${materialName}`}>{materialName} Quantity:</label>
+    <input
+      type="text"
+      id={`quantity-${materialName}`}
+      value={materialQuantities[materialName] || ""}
+      onChange={(event) => handleQuantityChange(event, materialName)}
+    />
+    {formErrors.materials && formErrors.materials[materialName] && (
+      <p className="error-message">{formErrors.materials[materialName]}</p>
+    )}
+  </div>
+))}
 
-               <input type="text" id={`quantity-${materialName}`} value={materialQuantities[materialName] || ""} onChange={(event) => handleQuantityChange(event, materialName)} />
 
-               {formErrors.materials && formErrors.materials[materialName] && <p className='error-message'>{formErrors.materials[materialName]}</p>}
-            </div>
-         ))}
 
          <div>
             <button type="submit">Add Product</button>

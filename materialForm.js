@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
+
 function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateForm }) {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [isFormValid, setIsFormValid] = useState(false);
+  
 
   useEffect(() => {
     if (materialToUpdate) {
