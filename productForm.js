@@ -1,199 +1,145 @@
 import React, { useState, useEffect } from "react";
 
 function ProductForm({ materials, onAdd }) {
-   const [productName, setProductName] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productQuantity, setProductQuantity] = useState("");
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [materialQuantities, setMaterialQuantities] = useState({});
 
-   const [productQuantity, setProductQuantity] = useState("");
+  const handleProductNameChange = (event) => {
+    setProductName(event.target.value);
+  };
 
-   const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const handleProductQuantityChange = (event) => {
+    const value = Number(event.target.value);
+    setProductQuantity(value);
+  };
 
-   const [materialQuantities, setMaterialQuantities] = useState({});
+  const handleQuantityChange = (event, materialName) => {
+    const quantity = event.target.value;
+    setMaterialQuantities((prevMaterialQuantities) => ({
+      ...prevMaterialQuantities,
+      [materialName]: quantity,
+    }));
+  };
 
-   const [formErrors, setFormErrors] = useState({});
-
-   const handleProductNameChange = (event) => {
-      setProductName(event.target.value);
-   };
-
-   const handleProductQuantityChange = (event) => {
-      const value = Number(event.target.value);
-
-      setProductQuantity(value);
-   };
-
-   const handleQuantityChange = (event, materialName) => {
-      const quantity = event.target.value;
-
-      setMaterialQuantities((prevMaterialQuantities) => ({
-         ...prevMaterialQuantities,
-
-         [materialName]: quantity,
-      }));
-   };
-
-   const handleMaterialSelect = (event) => {
-      const options = event.target.options;
-
-      const newSelectedMaterials = [];
-
-      const newMaterialQuantities = { ...materialQuantities };
-
-      for (let i = 0; i < options.length; i++) {
-         const option = options[i];
-
-         if (option.selected) {
-            const materialName = option.value;
-
-            newSelectedMaterials.push(materialName);
-
-            if (!newMaterialQuantities[materialName]) {
-               newMaterialQuantities[materialName] = materials.find((m) => m.name === materialName).defaultQuantity;
-            }
-         } else {
-            const materialName = option.value;
-
-            const index = newSelectedMaterials.indexOf(materialName);
-
-            if (index > -1) {
-               newSelectedMaterials.splice(index, 1);
-
-               delete newMaterialQuantities[materialName];
-            }
-         }
+  const handleMaterialSelect = (event) => {
+    const options = event.target.options;
+    const newSelectedMaterials = [];
+    const newMaterialQuantities = { ...materialQuantities };
+  
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      if (option.selected) {
+        const materialName = option.value;
+        newSelectedMaterials.push(materialName);
+        if (!newMaterialQuantities[materialName]) {
+          newMaterialQuantities[materialName] = materials.find((m) => m.name === materialName).defaultQuantity;
+        }
+      } else {
+        const materialName = option.value;
+        const index = newSelectedMaterials.indexOf(materialName);
+        if (index > -1) {
+          newSelectedMaterials.splice(index, 1);
+          delete newMaterialQuantities[materialName];
+        }
       }
+    }
+  
+    setSelectedMaterials(newSelectedMaterials);
+    setMaterialQuantities(newMaterialQuantities);
+  };
+  
 
-      setSelectedMaterials(newSelectedMaterials);
+  useEffect(() => {
+  }, [selectedMaterials, materialQuantities]);
 
-      setMaterialQuantities(newMaterialQuantities);
-   };
+ 
 
-   useEffect(() => {
-      setFormErrors({});
-   }, [selectedMaterials, materialQuantities]);
+  const handleAddProduct = () => {
+    const selectedMaterialObjects = selectedMaterials.map((materialName) => {
+    const material = materials.find((m) => m.name === materialName);
+    const quantity = materialQuantities[materialName];
+    return { ...material, quantity };
+  });
 
-   const validateForm = () => {
-      const errors = {};
 
-      if (productName.trim() === "") {
-         errors.productName = "Product name is required";
+    // Create a new array with updated material quantities
+    const updatedMaterials = materials.map((material) => {
+      if (selectedMaterials.includes(material.name)) {
+        const quantity = materialQuantities[material.name];
+        return {
+          ...material,
+          quantity: material.quantity - quantity,
+        };
+      } else {
+        return material;
       }
+    });
 
-      if (productQuantity === "") {
-         errors.productQuantity = "Quantity is required";
-      } else if (isNaN(productQuantity)) {
-         errors.productQuantity = "Quantity must be a number";
-      } else if (Number(productQuantity) <= 0) {
-         errors.productQuantity = "Quantity must be greater than 0";
-      }
+    const selectedMaterialCost = selectedMaterialObjects.reduce((total, material) => {
+      const quantity = materialQuantities[material.name];
+      return total + material.price * quantity;
+    }, 0);
 
-      if (selectedMaterials.length === 0) {
-         errors.materials = "At least one material must be selected";
-      }
+    const totalQuantity = Object.values(materialQuantities).reduce((total, quantity) => total + Number(quantity), 0);
+    console.log(totalQuantity)
+    const costPerUnit = selectedMaterialCost / productQuantity;
 
-      let materialErrors = {};
+    if (typeof onAdd === "function") {
+      onAdd(
+        {
+          name: productName,
+          price: costPerUnit.toFixed(2),
+          quantity: productQuantity,
+          materials: selectedMaterialObjects,
+          materialQuantities: materialQuantities,
+        },
+        selectedMaterialObjects
+      );
+    }
 
-      selectedMaterials.forEach((materialName) => {
-         if (materialQuantities[materialName] === "") {
-            materialErrors[materialName] = "Quantity is required";
-         } else if (isNaN(materialQuantities[materialName])) {
-            materialErrors[materialName] = "Quantity must be a number";
-         } else if (Number(materialQuantities[materialName]) <= 0) {
-            materialErrors[materialName] = "Quantity must be greater than 0";
-         }
-      });
+    setProductName("");
+    setProductQuantity("");
+    setSelectedMaterials([]);
+    setMaterialQuantities({});
+  };
 
-      if (Object.keys(materialErrors).length > 0) {
-         errors.materials = materialErrors;
-      }
-
-      setFormErrors(errors);
-
-      return Object.keys(errors).length === 0;
-   };
-
-   const handleAddProduct = (event) => {
-      event.preventDefault();
-
-      const isValid = validateForm();
-
-      if (isValid) {
-         const selectedMaterialObjects = selectedMaterials.map((materialName) => {
-            const material = materials.find((m) => m.name === materialName);
-
-            return { ...material, quantity: Number(materialQuantities[materialName]) };
-         });
-
-         const newProduct = { name: productName, quantity: Number(productQuantity), materials: selectedMaterialObjects };
-
-         onAdd(newProduct);
-
-         setProductName("");
-
-         setProductQuantity("");
-
-         setSelectedMaterials([]);
-
-         setMaterialQuantities({});
-      }
-   };
-
-   return (
-      <form className="add-product-form" onSubmit={handleAddProduct}>
-         <div>
-            <label htmlFor="productName">Product Name:</label>
-
-            <input type="text" id="productName" value={productName} onChange={handleProductNameChange} />
-
-            {formErrors.productName && <p className='error-message'>{formErrors.productName}</p>}
-         </div>
-
-         <div>
-            <label htmlFor="productQuantity">Quantity:</label>
-
-            <input type="text" id="productQuantity" value={productQuantity} onChange={handleProductQuantityChange} />
-
-            {formErrors.productQuantity && <p className='error-message'>{formErrors.productQuantity}</p>}
-         </div>
-
-         <div>
-            <label htmlFor="materials">Materials:</label>
-
-            <select id="materials" multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
-               {materials.map((material) => (
-                  <option key={material.name} value={material.name}>
-                     {material.name}
-                  </option>
-               ))}
-            </select>
-
-            {formErrors.materials && typeof formErrors.materials === "string" && <p  className='error-message'>{formErrors.materials}</p>}
-
-            {formErrors.materials && typeof formErrors.materials === "object" && (
-               <ul>
-                  {selectedMaterials.map((materialName) => (
-                     <li key={materialName}>
-                        {materialName}: {formErrors.materials[materialName]}
-                     </li>
-                  ))}
-               </ul>
-            )}
-         </div>
-
-         {selectedMaterials.map((materialName) => (
-            <div key={materialName}>
-               <label htmlFor={`quantity-${materialName}`}>{materialName} Quantity:</label>
-
-               <input type="text" id={`quantity-${materialName}`} value={materialQuantities[materialName] || ""} onChange={(event) => handleQuantityChange(event, materialName)} />
-
-               {formErrors.materials && formErrors.materials[materialName] && <p className='error-message'>{formErrors.materials[materialName]}</p>}
-            </div>
-         ))}
-
-         <div>
-            <button type="submit">Add Product</button>
-         </div>
-      </form>
-   );
+console.log(materials,'productform')
+  return (
+    <div className="add-product-form">
+      <h2>Create a new product:</h2>
+      <label>
+        Product name:
+        <input required type="text" value={productName} onChange={handleProductNameChange} />
+      </label>
+      <br />
+      <label>
+        Quantity:
+        <input required type="number" value={productQuantity} onChange={handleProductQuantityChange} />
+      </label>
+      <br />
+      <label>
+        Materials:
+        <select multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
+          {materials.map((material) => (
+            <option required key={material.name} value={material.name}>
+              {material.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <br />
+      {selectedMaterials.map((materialName) => (
+        <label key={materialName}>
+          {materialName} quantity:
+          <input type="number" value={materialQuantities[materialName] || ""} onChange={(event) => handleQuantityChange(event, materialName)} />
+        </label>
+      ))}
+      <br />
+      <button onClick={handleAddProduct}>Add Product</button>
+    </div>
+  );
 }
 
 export default ProductForm;
