@@ -5,7 +5,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
   const [materialsList, setMaterialsList] = useState(materials);
-//console.log(materials,'productsList')
+
   const handleEdit = (product) => {
     setProductToUpdate(product);
   };
@@ -32,21 +32,15 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   };
 
   const handleProductAdd = (product, selectedMaterials) => {
-    const materials = Array.isArray(selectedMaterials)
-      ? selectedMaterials.map((material) => ({
-          name: material.name,
-          quantity: material.quantity,
-        }))
-      : [];
-    
+   
+  
     const newProduct = {
       id: productsList.length + 1,
       name: product.name,
-      materials: materials,
+      materials: product.materials,
       quantity: product.quantity,
       price: product.price,
     };
-
     setProductsList((prevProducts) => [...prevProducts, newProduct]);
   };
 
@@ -54,7 +48,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     if (!selectedMaterials || typeof selectedMaterials !== 'object') {
       return '';
     }
-    
+ 
     const materialsArray = Object.values(selectedMaterials).map(
       (material) => `(${material.quantity}) ${material.name}`
     );
