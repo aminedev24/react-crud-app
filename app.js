@@ -77,12 +77,13 @@ function App() {
 
   return (
     <div>
-      <button className={`btn btn-primary ${showMaterialList ? 'active' : ''}`}onClick={() => setShowMaterialList(true)}>
-       Show Material List
+    
+      <button className={`custom-btn-1 ${showMaterialList ? 'active' : ''}`}onClick={() => setShowMaterialList(true)}>
+       Materials
       </button> 
-      <button className = { `btn btn-primary ${!showMaterialList ? 'active' : ''}` }
+      <button className = { `custom-btn-1 ${!showMaterialList ? 'active' : ''}` }
       onClick = {() => setShowMaterialList(false) } >
-        Show Product List 
+        Products
       </button>
       {showMaterialList ? (
         <MaterialList

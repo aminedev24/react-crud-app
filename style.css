@@ -72,7 +72,7 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #ddd;
 }
-
+/*
 button {
   background-color: #4CAF50;
   border: none;
@@ -86,7 +86,7 @@ button {
   cursor: pointer;
   margin: 0 .3rem !important;
 }
-
+*/
 /* Responsive styles */
 
 @media (max-width: 600px) {
@@ -260,4 +260,26 @@ button {
   color: red;
   font-size: 0.8em;
   margin-top: 0.2em;
+}
+
+/* Button Style 2 */
+.custom-btn-1 {
+  background-color: #008CBA;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  text-align: center;
+  margin: 0 .3rem !important;
+  cursor: pointer;
+}
+
+.custom-btn-1:hover {
+  background-color: #006d8f;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
