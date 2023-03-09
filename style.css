@@ -252,6 +252,12 @@ button {
 
 .material-list {
   font-size: 14px;
-  font-weight: bold;
+ 
   color: #555;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 0.2em;
 }
