@@ -5,6 +5,7 @@ import MaterialList from './materialList';
 import ProductForm from './productForm';
 import ProductList from './productList';
 import ProductQuantityForm from './productQuantityForm';
+import LocalStorageHandler from './save';
 
 const initialMaterials = [
   { name: 'Water', quantity: 1000, price: 5 },
@@ -45,8 +46,14 @@ initialProducts.forEach(product => {
 });
 
 function App() {
-  const [materials, setMaterials] = useState(initialMaterials);
-  const [products, setProducts] = useState(initialProducts);
+  const [materials, setMaterials] = useState(() => {
+    const storedMaterials = localStorage.getItem('materials');
+    return storedMaterials ? JSON.parse(storedMaterials) : initialMaterials;
+  });
+  const [products, setProducts] = useState(() => {
+    const storedProducts = localStorage.getItem('products');
+    return storedProducts ? JSON.parse(storedProducts) : initialProducts;
+  });
   const [showMaterialList, setShowMaterialList] = useState(true);
 
   const handleUpdate = (updatedMaterials) => {
@@ -78,6 +85,7 @@ function App() {
 
   return (
     <div>
+      <LocalStorageHandler materials={materials} products={products} />
         <div className='btn-container'>
           <button className={`custom-btn-1 ${showMaterialList ? 'active' : ''}`}onClick={() => setShowMaterialList(true)}>
           Materials

@@ -33,6 +33,8 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
     return material.quantity * material.price;
   };
 
+
+
   return (
 <div className='table-responsive'>
   <h2>Materials:</h2>
@@ -40,10 +42,14 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
     <thead className='table-dark'>
       <tr>
         <th>Name</th>
-        <th>Quantity (ml)</th>
-        <th>Price ($)</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Ptu</th>
         <th>Actions</th>
+        <th></th>
+        
       </tr>
+      <tr></tr>
     </thead>
     <tbody>
       {materials.map((material) => (
@@ -51,12 +57,14 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
           <td>{material.name}</td>
           <td>{material.quantity}</td>
           <td>{material.price}</td>
+          <td>{getPriceForMaterial(material)}</td>
           <td>
             <button className='btn btn-sm btn-danger' onClick={() => onDelete(material)}>Delete</button>
             <button className='btn btn-sm btn-info' onClick={() => handleEdit(material)}>Edit</button>
           </td>
         </tr>
       ))}
+      
       {materialToUpdate && (
         <tr>
           <td>
@@ -64,6 +72,7 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
           </td>
           <td>
             <input
+
               type="number"
               value={materialToUpdate.quantity}
               onChange={(event) => {
@@ -86,11 +95,18 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
           </td>
           
           <td>
-            <button onClick={() => handleMaterialUpdate(materialToUpdate, materialToUpdate)}>Save</button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button className='btn btn-info' onClick={() => handleMaterialUpdate(materialToUpdate, materialToUpdate)}>Save</button>
+            <button className='btn btn-secondary' onClick={handleCancel}>Cancel</button>
           </td>
         </tr>
+        
       )}
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+
+      </tr>
     </tbody>
   </table>
   <MaterialForm
