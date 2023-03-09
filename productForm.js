@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+
 function ProductForm({ materials, onAdd }) {
    const [productName, setProductName] = useState("");
 
@@ -173,8 +174,36 @@ function ProductForm({ materials, onAdd }) {
             {formErrors.productQuantity && <p className='error-message'>{formErrors.productQuantity}</p>}
          </div>
 
+         <div className="custom-select">
+  <label htmlFor="materials">Materials:</label>
+  <div className="select-wrapper">
+    <div className="selected-items">
+      {selectedMaterials.map((material) => (
+        <div className="selected-item" key={material}>
+          <span>{material}</span>
+          <button type="button" onClick={() => handleMaterialRemove(material)}>×</button>
+        </div>
+      ))}
+    </div>
+    <div className="options">
+
+    {materials.map((material) => (
+        <div
+          className={`option ${selectedMaterials.includes(material) ? "selected" : ""}`}
+          key={indexOf[material]}
+          onClick={() => handleMaterialSelect(material)}
+        >
+          {material}
+        </div>
+      ))}
+    </div>
+
+    </div>
+    </div>
          <div>
             <label htmlFor="materials">Materials:</label>
+
+            
 
             <select className="form-control"  id="materials" multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
                {materials.map((material) => (
