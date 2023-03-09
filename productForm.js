@@ -113,29 +113,42 @@ function ProductForm({ materials, onAdd }) {
 
    const handleAddProduct = (event) => {
       event.preventDefault();
-
+    
       const isValid = validateForm();
-
+    
       if (isValid) {
-         const selectedMaterialObjects = selectedMaterials.map((materialName) => {
-            const material = materials.find((m) => m.name === materialName);
-
-            return { ...material, quantity: Number(materialQuantities[materialName]) };
-         });
-
-         const newProduct = { name: productName, quantity: Number(productQuantity), materials: selectedMaterialObjects };
-
-         onAdd(newProduct);
-
-         setProductName("");
-
-         setProductQuantity("");
-
-         setSelectedMaterials([]);
-
-         setMaterialQuantities({});
+        const selectedMaterialObjects = selectedMaterials.map((materialName) => {
+          const material = materials.find((m) => m.name === materialName);
+    
+          return { ...material, quantity: Number(materialQuantities[materialName]) };
+        });
+    
+        const materialsCost = selectedMaterialObjects.reduce(
+          (total, material) => total + material.quantity * material.price,
+          0
+        );
+    
+        const price = (materialsCost / Number(productQuantity)).toFixed(2);
+    
+        const newProduct = {
+          name: productName,
+          quantity: Number(productQuantity),
+          materials: selectedMaterialObjects,
+          price: price,
+        };
+    
+        onAdd(newProduct);
+    
+        setProductName("");
+    
+        setProductQuantity("");
+    
+        setSelectedMaterials([]);
+    
+        setMaterialQuantities({});
       }
-   };
+    };
+    
 
    return (
       <form className="add-product-form" onSubmit={handleAddProduct}>

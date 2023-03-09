@@ -32,17 +32,12 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   };
 
   const handleProductAdd = (product, selectedMaterials) => {
-    const materials = Array.isArray(selectedMaterials)
-      ? selectedMaterials.map((material) => ({
-          name: material.name,
-          quantity: material.quantity,
-        }))
-      : [];
+    
     
     const newProduct = {
       id: productsList.length + 1,
       name: product.name,
-      materials: materials,
+      materials: product.materials,
       quantity: product.quantity,
       price: product.price,
     };
