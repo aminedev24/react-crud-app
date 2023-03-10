@@ -73,7 +73,6 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
           </td>
           <td>
             <input
-
               type="number"
               value={materialToUpdate.quantity}
               onChange={(event) => {

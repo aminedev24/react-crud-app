@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel }) {
+function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isUpdateForm }) {
    const [productName, setProductName] = useState("");
-
    const [selectedOptions, setSelectedOptions] = useState([]);
-   
    const [productQuantity, setProductQuantity] = useState("");
-
    const [selectedMaterials, setSelectedMaterials] = useState([]);
-
    const [materialQuantities, setMaterialQuantities] = useState({});
-
    const [materialInputs, setMaterialInputs] = useState({});
-
    const [formErrors, setFormErrors] = useState({});
+   
+   useEffect(() => {
+      if (productToUpdate) {
+        setName(productToUpdate.name);
+        setQuantity(productToUpdate.quantity);
+        setPrice(productToUpdate.price);
+      }
+    }, [productToUpdate]);
 
    const handleProductNameChange = (event) => {
       setProductName(event.target.value);
@@ -157,6 +159,7 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel }) 
 
    return (
       <form className="add-product-form" onSubmit={handleAddProduct}>
+         <h3>{isUpdateForm ? 'Update Material' : 'Add Material'}</h3>
          <div>
             <label htmlFor="productName">Product Name:</label>
 

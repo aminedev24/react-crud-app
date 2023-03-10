@@ -8,6 +8,7 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
 
   const handleEdit = (product) => {
     setProductToUpdate(product);
+    console.log('handleEdit', product);
   };
 
   const handleCancel = () => {
@@ -17,7 +18,9 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
   const handleProductUpdate = (productToUpdate, updatedProduct) => {
     const updatedProducts = productsList.map((product) =>
       product === productToUpdate ? updatedProduct : product
+
     );
+    console.log(productToUpdate,'pl')
     onUpdate(updatedProducts);
     setProductToUpdate(null);
     setProductsList(updatedProducts);
@@ -79,6 +82,41 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
             </td>
           </tr>
         ))}
+        {productToUpdate && (
+        <tr>
+          <td>
+            <input type="text" value={productToUpdate.name} disabled />
+          </td>
+          <td>
+            <input
+              type="number"
+              value={productToUpdate.quantity}
+              onChange={(event) => {
+                const value = Number(event.target.value);
+                const updatedMaterial = { ...productToUpdate, quantity: value };
+                setproductToUpdate(updatedMaterial);
+              }}
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              value={productToUpdate.price}
+              onChange={(event) => {
+                const value = Number(event.target.value);
+                const updatedMaterial = { ...productToUpdate, price: value };
+                setproductToUpdate(updatedMaterial);
+              }}
+            />
+          </td>
+          
+          <td>
+            <button className='btn btn-info' onClick={() => handleMaterialUpdate(productToUpdate, productToUpdate)}>Save</button>
+            <button className='btn btn-secondary' onClick={handleCancel}>Cancel</button>
+          </td>
+        </tr>
+        
+      )}
       </tbody>
     );
   };
