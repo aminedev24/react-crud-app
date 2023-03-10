@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import ProductMaterialForm from './form';
 
-function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateForm }) {
-  const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [isFormValid, setIsFormValid] = useState(false);
+function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateForm, productToUpdate }) {
+  const [initialValues, setInitialValues] = useState({
+    name: '',
+    quantity: 0,
+    price: 0
+  });
 
+<<<<<<< Updated upstream
   useEffect(() => {
     if (materialToUpdate) {
       setName(materialToUpdate.name);
@@ -39,14 +42,52 @@ function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateFor
     if (isUpdateForm) {
       onUpdate(materialToUpdate, newMaterial);
     } else {
+=======
+  const handleAdd = (values) => {
+    const newMaterial = {
+      name: values.name,
+      quantity: values.quantity,
+      price: values.price
+    };
+  
+    if (typeof onAdd === 'function') {
+>>>>>>> Stashed changes
       onAdd(newMaterial);
     }
-    setName('');
-    setQuantity(0);
-    setPrice(0);
+  };
+  
+
+
+  useEffect(() => {
+    if (productToUpdate) {
+      setInitialValues({
+        name: productToUpdate.name,
+        materials: productToUpdate.materials,
+        price: productToUpdate.price
+      });
+    }
+  }, [productToUpdate]);
+
+  const handleFormSubmit = (values) => {
+    if (isUpdateForm) {
+      onUpdate(productToUpdate, values);
+    } else {
+      if (typeof onAdd === 'function') {
+        onAdd(values);
+      }
+    }
   };
 
+  const handleFormCancel = () => {
+    onCancel();
+  };
+  
+  const isMaterialForm = productToUpdate ? false : true;
+
+  const formClassName = isMaterialForm ? 'add-material-form' : 'add-product-form';
+
   return (
+<<<<<<< Updated upstream
     <form onSubmit={handleFormSubmit}>
       <h3>{isUpdateForm ? 'Update Material' : 'Add Material'}</h3>
       <div>
@@ -70,7 +111,43 @@ function MaterialForm({ onAdd, onUpdate, onCancel, materialToUpdate, isUpdateFor
         </button>
       </div>
     </form>
+=======
+    <ProductMaterialForm
+      initialValues={initialValues}
+      onSubmit={handleFormSubmit}
+      onCancel={handleFormCancel}
+      onAdd={handleAdd}
+      className={formClassName} 
+      title={isUpdateForm ? 'Update Material' : 'Add Material'}
+      fields={[
+        {
+          name: 'name',
+          label: 'Name:',
+          type: 'text',
+          required: true
+        },
+        {
+          name: 'quantity',
+          label: 'Quantity:',
+          type: 'number',
+          required: true,
+          min: 0
+        },
+        {
+          name: 'price',
+          label: 'Price:',
+          type: 'number',
+          required: true,
+          min: 0
+        }
+      ]}
+      submitButtonText={isUpdateForm ? 'Update' : 'Add'}
+      
+    />
+>>>>>>> Stashed changes
   );
 }
 
 export default MaterialForm;
+
+
