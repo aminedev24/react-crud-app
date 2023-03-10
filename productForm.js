@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function ProductForm({ materials, onAdd }) {
+function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel }) {
    const [productName, setProductName] = useState("");
 
    const [selectedOptions, setSelectedOptions] = useState([]);

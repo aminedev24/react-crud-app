@@ -16,12 +16,13 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
 
   const handleMaterialUpdate = (materialToUpdate, updatedMaterial) => {
     const updatedMaterials = materials.map((material) =>
-      material === materialToUpdate ? updatedMaterial : material
+      material.name === materialToUpdate.name ? updatedMaterial : material
     );
     onUpdate(updatedMaterials);
     setMaterialToUpdate(null);
     setKey(key + 1);
   };
+  
 
   const handleMaterialAdd = (newMaterial) => {
     onAdd(newMaterial);
