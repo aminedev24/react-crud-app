@@ -47,7 +47,7 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
         <th>Price</th>
         <th>Ptu</th>
         <th>Actions</th>
-        <th></th>
+        
         
       </tr>
       <tr></tr>
@@ -101,12 +101,7 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
         </tr>
         
       )}
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-
-      </tr>
+      
     </tbody>
   </table>
   <MaterialForm

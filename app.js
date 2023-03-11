@@ -8,7 +8,7 @@ import ProductQuantityForm from './productQuantityForm';
 import LocalStorageHandler from './save';
 
 const initialMaterials = [
-  { name: 'Water', quantity: 1000, price: 5 },
+  { name: 'Water', quantity: 100, price: 5 },
   { name: 'Sugar', quantity: 500, price: 20 },
   { name: 'Lemon Juice', quantity: 250, price: 15 },
 ];
@@ -17,12 +17,13 @@ const initialProducts = [
   {
     name: 'Lemonade',
     materials: [
-      { name: 'Water', quantity: 1000, price: 300},
+      { name: 'Water', quantity: 100, price: 300},
       { name: 'Sugar', quantity: 50, price: 20 },
       { name: 'Lemon Juice', quantity: 25, price: 15 }
     ],
     quantity :10,
-    price: 0 // add a price property with an initial value of 0
+    price: 0,
+    mcu: 0
   },
   {
     name: 'Ice Tea',
@@ -32,18 +33,30 @@ const initialProducts = [
       { name: 'Sugar', quantity: 25, price: 20 }
     ],
     quantity: 20,
-    price: 0 // add a price property with an initial value of 0
+    price: 0,
+    mcu: 0
   }
 ];
 
 // calculate the product prices based on the materials' prices and quantities
 initialProducts.forEach(product => {
-  const totalPrice = product.materials.reduce((acc, material) => {
-    return acc + (material.quantity * material.price / product.quantity);
-  }, 0);
+  let totalPrice = 0;
+  let mcuObj = {};
+  
+  product.materials.forEach(material => {
+    const materialCost = material.quantity * material.price;
+    totalPrice += materialCost;
+    
+    const mcu = material.price * material.quantity /product.quantity;
+    mcuObj[material.name] = mcu;
+  });
 
   product.price = totalPrice;
+  product.mcu = mcuObj;
+  //console.log(product.mcu)
 });
+
+
 
 function App() {
   const [materials, setMaterials] = useState(() => {

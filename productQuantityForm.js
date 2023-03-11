@@ -64,7 +64,7 @@ function ProductQuantityForm(props) {
 
   return (
     <div className='mqc-c'>
-      <form className="mqc" onSubmit={handleSubmit}>
+      <form className="mqc form-group" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="product-select">Select a product:</label>
           <select

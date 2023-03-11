@@ -47,33 +47,50 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
     setProductsList((prevProducts) => [...prevProducts, newProduct]);
   };
 
-  const getMaterialsAsString = (selectedMaterials) => {
-    if (!selectedMaterials || typeof selectedMaterials !== 'object') {
-      return '';
-    }
- 
-    const materialsArray = Object.values(selectedMaterials).map(
-      (material) => `(${material.quantity}) ${material.name}`
-    );
-    
-    if (materialsArray.length === 0) {
-      return '';
-    }
+  const getMaterialsInfo = (selectedMaterials) => {
+  if (!selectedMaterials || typeof selectedMaterials !== 'object') {
+    return '';
+  }
 
-    const materialNames = materialsArray.join(', ');
+  const materialsArray = Object.values(selectedMaterials).map(
+    (material) => (
+      <span key={material.name}>
+        {`${material.name}: ${material.quantity}`}
+      </span>
+    )
+  );
 
-    return <span className="material-list">{materialNames}</span>;
-  };
+  if (materialsArray.length === 0) {
+    return '';
+  }
 
+  return <div className="material-list">{materialsArray}</div>;
+};
+
+function calculateCosts(products) {
+  let result = "";
+  products.forEach((product) => {
+    product.materials.forEach((material) => {
+      const costPerUnit = material.price * material.quantity / product.quantity;
+      result += `${material.name}: ${costPerUnit.toFixed(2)}\n`;
+    });
+  });
+  console.log(result)
+  return result;
+}
+
+/*
   const renderProducts = () => {
     return (
       <tbody>
         {productsList.map((product, index) => (
           <tr key={`${product.name}-${index}`}>
             <td>{product.name}</td>
-            <td>{getMaterialsAsString(product.materials)}</td>
+            <td>{getMaterialsInfo(product.materials)}</td>
+            
             <td>{product.quantity}</td>
             <td>{product.price}</td>
+            
             <td>
               <button className='btn btn-danger btn-sm' onClick={() => handleProductDelete(product)}>
                 Delete
@@ -120,6 +137,64 @@ function ProductList({ products, onDelete, onUpdate, materials }) {
       </tbody>
     );
   };
+*/
+const renderProducts = () => {
+  return (
+    <tbody>
+      {productsList.map((product, index) => (
+        <tr key={`${product.name}-${index}`}>
+          <td>{product.name}</td>
+          <td className='m-cell'>
+            {product.materials.map((material) => (
+              <p className='m-list' key={material.name}>{material.name}, <strong> prix:</strong>   {(material.quantity * material.price / product.quantity)}, <strong> qty</strong>:  {material.quantity}</p>
+            ))}
+          </td>
+          <td>{product.quantity}</td>
+          <td>{product.price}</td>
+          <td>
+            <button className='btn btn-danger btn-sm' onClick={() => handleProductDelete(product)}>
+              Delete
+            </button>
+            <button className='btn btn-info btn-sm' onClick={() => handleEdit(product)}>Edit</button>
+          </td>
+        </tr>
+      ))}
+      {productToUpdate && (
+        <tr>
+          <td>
+            <input type="text" value={productToUpdate.name} disabled />
+          </td>
+          <td>
+            <input
+              type="number"
+              value={productToUpdate.quantity}
+              onChange={(event) => {
+                const value = Number(event.target.value);
+                const updatedMaterial = { ...productToUpdate, quantity: value };
+                setproductToUpdate(updatedMaterial);
+              }}
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              value={productToUpdate.price}
+              onChange={(event) => {
+                const value = Number(event.target.value);
+                const updatedMaterial = { ...productToUpdate, price: value };
+                setproductToUpdate(updatedMaterial);
+              }}
+            />
+          </td>
+          <td>
+            <button className='btn btn-info' onClick={() => handleMaterialUpdate(productToUpdate, productToUpdate)}>Save</button>
+            <button className='btn btn-secondary' onClick={handleCancel}>Cancel</button>
+          </td>
+        </tr>
+      )}
+    </tbody>
+  );
+};
 
   return (
     <div className='table-responsive'>

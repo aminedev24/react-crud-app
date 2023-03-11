@@ -132,6 +132,7 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
     
         const materialsCost = selectedMaterialObjects.reduce(
           (total, material) => total + material.quantity * material.price,
+          
           0
         );
     
