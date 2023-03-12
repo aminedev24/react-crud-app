@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function renderModal(materials, onClose) {
-  console.log(materials,'renderModal')
+ // console.log(materials,'renderModal')
   const show = materials ? "show" : "";
   return (
     <div className={`modal ${show}`} onClick={onClose}>
@@ -63,8 +63,8 @@ function ProductQuantityForm(props) {
   }
 
   return (
-    <div className='mqc-c'>
-      <form className="mqc form-group" onSubmit={handleSubmit}>
+    <div className='mqc-c form-group'>
+      <form className="mqc" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="product-select">Select a product:</label>
           <select

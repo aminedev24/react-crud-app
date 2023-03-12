@@ -6,6 +6,7 @@ import ProductForm from './productForm';
 import ProductList from './productList';
 import ProductQuantityForm from './productQuantityForm';
 import LocalStorageHandler from './save';
+import SellProduct from './sell'
 
 const initialMaterials = [
   { name: 'Water', quantity: 100, price: 5 },
@@ -16,6 +17,7 @@ const initialMaterials = [
 const initialProducts = [
   {
     name: 'Lemonade',
+    id: 0,
     materials: [
       { name: 'Water', quantity: 100, price: 300},
       { name: 'Sugar', quantity: 50, price: 20 },
@@ -23,10 +25,12 @@ const initialProducts = [
     ],
     quantity :10,
     price: 0,
-    mcu: 0
+    mcu: 0,
+    
   },
   {
     name: 'Ice Tea',
+    id: 1,
     materials: [
       { name: 'Water', quantity: 100, price: 50 },
       { name: 'Tea Leaves', quantity: 50, price: 30 },
@@ -34,10 +38,11 @@ const initialProducts = [
     ],
     quantity: 20,
     price: 0,
-    mcu: 0
+    mcu: 0,
+   
   }
 ];
-
+//console.log(initialProducts)
 // calculate the product prices based on the materials' prices and quantities
 initialProducts.forEach(product => {
   let totalPrice = 0;
@@ -124,7 +129,8 @@ function App() {
           materials={materials}
         />
       )}
-      <ProductQuantityForm products={products} />
+      
+      
     </div>
 
     

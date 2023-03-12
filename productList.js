@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ProductForm from './productForm';
-
+import ProductQuantityForm from './productQuantityForm';
 function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
@@ -138,16 +138,32 @@ function calculateCosts(products) {
     );
   };
 */
+
 const renderProducts = () => {
   return (
     <tbody>
       {productsList.map((product, index) => (
         <tr key={`${product.name}-${index}`}>
           <td>{product.name}</td>
-          <td className='m-cell'>
-            {product.materials.map((material) => (
-              <p className='m-list' key={material.name}>{material.name}, <strong> prix:</strong>   {(material.quantity * material.price / product.quantity)}, <strong> qty</strong>:  {material.quantity}</p>
-            ))}
+          <td>
+            <table className='table table-sm table-bordered table-dark">'>
+              <thead>
+                <tr>
+                  <th>name</th>
+                  <th>qty</th>
+                  <th>price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product.materials.map((material) => (
+                  <tr key={material.name}>
+                    <td>{material.name}</td>
+                    <td>{material.quantity}</td>
+                    <td>{material.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </td>
           <td>{product.quantity}</td>
           <td>{product.price}</td>
@@ -196,9 +212,11 @@ const renderProducts = () => {
   );
 };
 
+
+
+
   return (
     <div className='table-responsive'>
-      <h2>Products:</h2>
       <table className='table table-bordered'>
         <thead className='table-dark'>
           <tr>
@@ -219,6 +237,7 @@ const renderProducts = () => {
         productToUpdate={productToUpdate}
         onCancel={handleCancel}
       />
+      <ProductQuantityForm products={products} />
     </div>
   );
 }

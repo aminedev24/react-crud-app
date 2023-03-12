@@ -1,7 +1,4 @@
-body {
-  margin: 0;
-  padding: 0;
-}
+
 /* MaterialList */
 ul {
   list-style-type: none;
@@ -53,16 +50,16 @@ h3 {
 }
 
 table {
-  border-collapse: collapse;
   width: 100%;
-  margin-bottom: 2rem;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-td,
-th {
-  padding: 0.5rem;
+th,
+td {
+  padding: 8px;
   text-align: left;
-  border: 1px solid #ddd;
+  vertical-align: top;
 }
 
 th {
@@ -70,28 +67,19 @@ th {
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #f9f9f9;
 }
 
-tr:hover {
-  background-color: #ddd;
+.m-cell {
+  display: flex;
+  flex-wrap: wrap; /* add this line */
+  width: 200px;
 }
-/*
-button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  margin: 0 .3rem !important;
+
+.m-list {
+  margin: 0;
+  padding-right: 10px; /* add some padding to separate items */
 }
-*/
-/* Responsive styles */
 
 @media (max-width: 600px) {
   .container {
@@ -150,6 +138,7 @@ button {
     font-size: 12px;
   }
 }
+
 
 .add-product-form {
   border: 2px solid #ccc;
@@ -405,9 +394,3 @@ label {
   display: block !important;
 }
 
-.m-cell {
-  width: 250px; /* or any other value you prefer */
-  white-space: nowrap; /* prevents line breaks */
-  overflow: hidden; /* prevents overflow */
-  text-overflow: ellipsis; /* adds ellipsis for overflow */
-}
