@@ -160,7 +160,7 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
 
    return (
       <form className="add-product-form" onSubmit={handleAddProduct}>
-         <h3>{isUpdateForm ? 'Update Material' : 'Add Material'}</h3>
+         <h3>{isUpdateForm ? 'Update Product' : 'Add Product'}</h3>
          <div>
             <label htmlFor="productName">Product Name:</label>
 

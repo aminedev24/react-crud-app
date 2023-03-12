@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ProductForm from './productForm';
-import ProductQuantityForm from './productQuantityForm';
+
 function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
@@ -139,6 +139,12 @@ function calculateCosts(products) {
   };
 */
 
+const [showMaterials, setShowMaterials] = useState(false);
+
+const toggleMaterials = () => {
+  setShowMaterials(!showMaterials);
+}
+
 const renderProducts = () => {
   return (
     <tbody>
@@ -146,28 +152,33 @@ const renderProducts = () => {
         <tr key={`${product.name}-${index}`}>
           <td>{product.name}</td>
           <td>
-            <table className='table table-sm table-bordered table-dark">'>
-              <thead>
-                <tr>
-                  <th>name</th>
-                  <th>qty</th>
-                  <th>price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {product.materials.map((material) => (
-                  <tr key={material.name}>
-                    <td>{material.name}</td>
-                    <td>{material.quantity}</td>
-                    <td>{material.price}</td>
+            {showMaterials && (
+              <table className='table table-sm table-bordered table-dark'>
+                <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>qty</th>
+                    <th>price</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {product.materials.map((material) => (
+                    <tr key={material.name}>
+                      <td>{material.name}</td>
+                      <td>{material.quantity}</td>
+                      <td>{material.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            <button className='btn-mt btn btn-secondary btn-sm' onClick={toggleMaterials}>
+              {showMaterials ? 'Hide Materials' : 'Show Materials'}
+            </button>
           </td>
           <td>{product.quantity}</td>
           <td>{product.price}</td>
-          <td>
+          <td className='btn-action'>
             <button className='btn btn-danger btn-sm' onClick={() => handleProductDelete(product)}>
               Delete
             </button>
@@ -212,23 +223,23 @@ const renderProducts = () => {
   );
 };
 
+return (
+  <div className='table-responsive'>
+    <table className='table table-bordered'>
+      <thead className='table-dark'>
+        <tr>
+          <th>Name</th>
+          <th>Materials</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      {renderProducts()}
+    </table>
+  
 
 
-
-  return (
-    <div className='table-responsive'>
-      <table className='table table-bordered'>
-        <thead className='table-dark'>
-          <tr>
-            <th>Name</th>
-            <th>Materials</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        {renderProducts()}
-      </table>
 
       <ProductForm
         materials={materials}
@@ -237,7 +248,7 @@ const renderProducts = () => {
         productToUpdate={productToUpdate}
         onCancel={handleCancel}
       />
-      <ProductQuantityForm products={products} />
+      
     </div>
   );
 }

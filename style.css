@@ -57,7 +57,6 @@ table {
 
 th,
 td {
-  padding: 8px;
   text-align: left;
   vertical-align: top;
 }
@@ -192,12 +191,11 @@ tr:nth-child(even) {
 .add-material-form {
   display: flex;
   flex-direction: column;
-  width: 400px;
   margin: 0 auto;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 20px;
-  width: 400px;
+  width: 80%;
 }
 
 .add-material-form h3 {
@@ -394,3 +392,12 @@ label {
   display: block !important;
 }
 
+.btn-mt {
+  font-size: 12px !important;
+}
+
+.btn-action {
+  font-size: 12px !important;
+  display: flex;
+  gap: .5rem;
+}
