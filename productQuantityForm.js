@@ -92,7 +92,7 @@ function ProductQuantityForm(props) {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Calculate
+          <i className='fas fa-calculator' />
         </button>
       </form>
       {isModalOpen && renderModal(requiredMaterials, closeModal)}

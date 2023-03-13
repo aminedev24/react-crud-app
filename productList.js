@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ProductForm from './productForm';
-import ProductQuantityForm from './ProductQuantityForm'
+import ProductQuantityForm from './productQuantityForm'
+
 function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
@@ -173,17 +174,17 @@ const renderProducts = () => {
               </table>
             )}
             <button className='btn-mt btn btn-secondary btn-sm' onClick={toggleMaterials}>
-              {showMaterials ? 'Hide Materials' : 'Show Materials'}
+              {showMaterials ? 'Hide Materials' : <i className='fas fa-list-alt' />}
             </button>
+
           </td>
           <td>{product.quantity}</td>
           <td>{product.price}</td>
           <td className='btn-action'>
             <button className='btn btn-danger btn-sm' onClick={() => handleProductDelete(product)}>
-            
-              Delete
+            <i className='fas fa-trash' />
             </button>
-            <button className='btn btn-info btn-sm' onClick={() => handleEdit(product)}>Edit</button>
+            <button className='btn btn-info btn-sm' onClick={() => handleEdit(product)}><i className='fas fa-pen' /></button>
           </td>
         </tr>
       ))}

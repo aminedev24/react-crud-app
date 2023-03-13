@@ -220,7 +220,7 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
 
 
          <div>
-            <button type="submit">Add Product</button>
+            <button className='btn btn-primary' type="submit"><i className="fas fa-plus"></i></button>
          </div>
       </form>
    );

@@ -116,7 +116,7 @@ function App() {
               className={`menu-item ${!showMaterialList ? 'active' : ''}`}
               onClick={() => setShowMaterialList(false)}
             >
-              <i className="fas fa-shopping-cart"></i>
+              <i className="fas fa-box"></i>
               <span>Products</span>
             </div>
           </div>
