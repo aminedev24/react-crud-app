@@ -1,0 +1,63 @@
+.add-material-form {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  width: 80%;
+}
+
+.add-material-form h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.add-material-form div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.add-material-form label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.add-material-form input[type="text"],
+.add-material-form input[type="number"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.add-material-form button[type="submit"],
+.add-material-form button[type="button"] {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-material-form button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-material-form button[type="submit"]:not(:disabled):hover {
+  background-color: #0069d9;
+}
+
+.material-list {
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  flex-direction: column;
+}

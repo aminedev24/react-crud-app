@@ -1,4 +1,7 @@
-
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+}
 /* MaterialList */
 ul {
   list-style-type: none;
@@ -55,6 +58,8 @@ table {
   margin-bottom: 20px;
 }
 
+
+
 th,
 td {
   text-align: left;
@@ -69,11 +74,6 @@ tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.m-cell {
-  display: flex;
-  flex-wrap: wrap; /* add this line */
-  width: 200px;
-}
 
 .m-list {
   margin: 0;
@@ -139,118 +139,6 @@ tr:nth-child(even) {
 }
 
 
-.add-product-form {
-  border: 2px solid #ccc;
-  padding: 20px;
-  width: 80%;
-  margin: 0 auto;
-  text-align: left;
-}
-
-.add-product-form h2 {
-  margin-top: 0;
-}
-
-.add-product-form label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.add-product-form select {
-  width: 100%;
-  height: 100px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.add-product-form input[type="text"],
-.add-product-form input[type="number"] {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-}
-
-.add-product-form button {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.add-product-form button:hover {
-  background-color: #2e8b57;
-}
-
-.add-material-form {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
-  width: 80%;
-}
-
-.add-material-form h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.add-material-form div {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-.add-material-form label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.add-material-form input[type="text"],
-.add-material-form input[type="number"] {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 1rem;
-  outline: none;
-}
-
-.add-material-form button[type="submit"],
-.add-material-form button[type="button"] {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 3px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #007bff;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.add-material-form button[type="submit"]:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.add-material-form button[type="submit"]:not(:disabled):hover {
-  background-color: #0069d9;
-}
-
-.material-list {
-  font-size: 14px;
-  color: #555;
-  display: flex;
-  flex-direction: column;
-}
 
 .m-list{
   margin: .2rem 0;
@@ -290,19 +178,20 @@ tr:nth-child(even) {
   margin: 0.5em;
 }
 
-.mqc-c {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40vh;
+@media (max-width: 768px) {
+  .mqc-c {
+    height: auto;
+    padding: 20px;
+  }
 }
-
 .mqc {
-  width: 400px;
-  padding: 20px;
-  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   border-radius: 5px;
   background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .form-group {
@@ -344,22 +233,7 @@ label {
   line-height: 1.5;
   cursor: pointer;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
-  box-shadow 0.15s ease-in-out;
-}
-
-.btn-primary:hover {
-  background-color: #0069d9;
-  border-color: #0062cc;
-}
-
-.btn-primary:focus {
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-}
-
-.btn-primary:active {
-  background-color: #0062cc;
-  border-color: #005cbf;
+    box-shadow 0.15s ease-in-out;
 }
 
 

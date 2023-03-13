@@ -102,38 +102,42 @@ function App() {
   };
 
   return (
-    <div>
-      <LocalStorageHandler materials={materials} products={products} />
-        <div className='btn-container'>
-          <button className={`custom-btn-1 ${showMaterialList ? 'active' : ''}`}onClick={() => setShowMaterialList(true)}>
-          Materials
-          </button> 
-          <button className = { `custom-btn-1 ${!showMaterialList ? 'active' : ''}` }
-          onClick = {() => setShowMaterialList(false) } >
-            Products
-          </button>
+    <div className='app-container'>
+          <LocalStorageHandler materials={materials} products={products} />
+          <div className='menu-container'>
+            <div
+              className={`menu-item ${showMaterialList ? 'active' : ''}`}
+              onClick={() => setShowMaterialList(true)}
+            >
+              <i className="fas fa-box-open"></i>
+              <span>Materials</span>
+            </div>
+            <div
+              className={`menu-item ${!showMaterialList ? 'active' : ''}`}
+              onClick={() => setShowMaterialList(false)}
+            >
+              <i className="fas fa-shopping-cart"></i>
+              <span>Products</span>
+            </div>
+          </div>
+          {showMaterialList && (
+            <MaterialList
+              materials={materials}
+              onDelete={handleDelete}
+              onUpdate={handleUpdate}
+              onAdd={handleAdd}
+            />
+          )}
+          {!showMaterialList && (
+            <ProductList
+              products={products}
+              onDelete={handleDeleteProduct}
+              onUpdate={handleUpdateProduct}
+              onAdd={handleAddProduct}
+              materials={materials}
+            />
+          )}
         </div>
-      {showMaterialList ? (
-        <MaterialList
-          materials={materials}
-          onDelete={handleDelete}
-          onUpdate={handleUpdate}
-          onAdd={handleAdd}
-        />
-      ) : (
-        <ProductList
-          products={products}
-          onDelete={handleDeleteProduct}
-          onUpdate={handleUpdateProduct}
-          onAdd={handleAddProduct}
-          materials={materials}
-        />
-      )}
-      
-      
-    </div>
-
-    
   );
 }
 

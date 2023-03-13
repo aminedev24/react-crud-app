@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ProductForm from './productForm';
-
+import ProductQuantityForm from './ProductQuantityForm'
 function ProductList({ products, onDelete, onUpdate, materials }) {
   const [productToUpdate, setProductToUpdate] = useState(null);
   const [productsList, setProductsList] = useState(products);
@@ -180,6 +180,7 @@ const renderProducts = () => {
           <td>{product.price}</td>
           <td className='btn-action'>
             <button className='btn btn-danger btn-sm' onClick={() => handleProductDelete(product)}>
+            
               Delete
             </button>
             <button className='btn btn-info btn-sm' onClick={() => handleEdit(product)}>Edit</button>
@@ -213,8 +214,9 @@ const renderProducts = () => {
               }}
             />
           </td>
+          <td></td>
           <td>
-            <button className='btn btn-info' onClick={() => handleMaterialUpdate(productToUpdate, productToUpdate)}>Save</button>
+            <button className='btn btn-info'onClick={() => handleMaterialUpdate(productToUpdate, productToUpdate)}>Save</button>
             <button className='btn btn-secondary' onClick={handleCancel}>Cancel</button>
           </td>
         </tr>
@@ -224,6 +226,7 @@ const renderProducts = () => {
 };
 
 return (
+  <div>
   <div className='table-responsive'>
     <table className='table table-bordered'>
       <thead className='table-dark'>
@@ -248,7 +251,9 @@ return (
         productToUpdate={productToUpdate}
         onCancel={handleCancel}
       />
-      
+
+    </div>
+    <ProductQuantityForm products={products} />
     </div>
   );
 }

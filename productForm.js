@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 
 function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isUpdateForm }) {
    const [productName, setProductName] = useState("");

@@ -38,7 +38,6 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
 
   return (
 <div className='table-responsive'>
-  <h2>Materials:</h2>
   <table className='table table-bordered'>
     <thead className='table-dark'>
       <tr>
@@ -59,7 +58,8 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
           <td>{material.quantity}</td>
           <td>{material.price}</td>
           <td>{getPriceForMaterial(material)}</td>
-          <td>
+          <td className='btn-action'>
+          
             <button className='btn btn-sm btn-danger' onClick={() => onDelete(material)}>Delete</button>
             <button className='btn btn-sm btn-info' onClick={() => handleEdit(material)}>Edit</button>
           </td>
