@@ -9,9 +9,9 @@ import LocalStorageHandler from './save';
 import SellProduct from './sell'
 
 const initialMaterials = [
-  { name: 'Water', quantity: 100, price: 5 },
-  { name: 'Sugar', quantity: 500, price: 20 },
-  { name: 'Lemon Juice', quantity: 250, price: 15 },
+  { name: 'Water', quantity: 100, price: 5 ,id: 1},
+  { name: 'Sugar', quantity: 500, price: 20 ,id: 2},
+  { name: 'Lemon Juice', quantity: 250, price: 15 ,id:3},
 ];
 
 const initialProducts = [
@@ -73,7 +73,7 @@ function App() {
     return storedProducts ? JSON.parse(storedProducts) : initialProducts;
   });
   const [showMaterialList, setShowMaterialList] = useState(true);
-
+  const [showProductList, setShowProductList] = useState(false);
   const handleUpdate = (updatedMaterials) => {
     setMaterials(updatedMaterials);
   };
@@ -100,44 +100,34 @@ function App() {
   const handleDeleteProduct = (productToDelete) => {
     setProducts(products.filter((product) => product !== productToDelete));
   };
+  
+  const handleMaterialClick = () => {
+    setShowMaterialList(true);
+    setShowProductList(false);
+  };
+
+  const handleProductClick = () => {
+    setShowMaterialList(false);
+    setShowProductList(true);
+  };
 
   return (
-    <div className='app-container'>
-          <LocalStorageHandler materials={materials} products={products} />
-          <div className='menu-container'>
-            <div
-              className={`menu-item ${showMaterialList ? 'active' : ''}`}
-              onClick={() => setShowMaterialList(true)}
-            >
-              <i className="fas fa-box-open"></i>
-              <span>Materials</span>
+<div className='app-container'>
+              <LocalStorageHandler materials={materials} products={products} />
+              <div className='menu-container'>
+                <div className={`menu-item ${showMaterialList ? 'active' : ''}`} onClick={handleMaterialClick}>
+                  <i className="fas fa-box-open"></i>
+                  <span>Materials</span>
+                </div>
+                <div className={`menu-item ${showProductList ? 'active' : ''}`} onClick={handleProductClick}>
+                  <i className="fas fa-box"></i>
+                  <span>Products</span>
+                </div>
+                {/* Add more menu items as needed */}
+              </div>
+              {showMaterialList && <MaterialList materials={materials} onDelete={handleDelete} onUpdate={handleUpdate} onAdd={handleAdd} />}
+              {showProductList && <ProductList products={products} onDelete={handleDeleteProduct} onUpdate={handleUpdateProduct} onAdd={handleAddProduct} materials={materials} />}
             </div>
-            <div
-              className={`menu-item ${!showMaterialList ? 'active' : ''}`}
-              onClick={() => setShowMaterialList(false)}
-            >
-              <i className="fas fa-box"></i>
-              <span>Products</span>
-            </div>
-          </div>
-          {showMaterialList && (
-            <MaterialList
-              materials={materials}
-              onDelete={handleDelete}
-              onUpdate={handleUpdate}
-              onAdd={handleAdd}
-            />
-          )}
-          {!showMaterialList && (
-            <ProductList
-              products={products}
-              onDelete={handleDeleteProduct}
-              onUpdate={handleUpdateProduct}
-              onAdd={handleAddProduct}
-              materials={materials}
-            />
-          )}
-        </div>
   );
 }
 

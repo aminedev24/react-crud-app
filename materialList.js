@@ -37,73 +37,55 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
 
 
   return (
-<div className='table-responsive'>
-  <table className='table table-bordered'>
-    <thead className='table-dark'>
-      <tr>
-        <th>Name</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Ptu</th>
-        <th>Actions</th>
-        
-        
-      </tr>
-      <tr></tr>
-    </thead>
-    <tbody>
-      {materials.map((material) => (
-        <tr key={material.name}>
-          <td>{material.name}</td>
-          <td>{material.quantity}</td>
-          <td>{material.price}</td>
-          <td>{getPriceForMaterial(material)}</td>
-          <td className='btn-action'>
-          
-            <button className='btn btn-sm btn-danger' onClick={() => onDelete(material)}><i className='fas fa-trash'/></button>
-            <button className='btn btn-sm btn-info' onClick={() => handleEdit(material)}><i className='fas fa-pen'/></button>
-          </td>
-        </tr>
-      ))}
-      
-      {materialToUpdate && (
-        <tr>
-          <td>
-            <input type="text" value={materialToUpdate.name} disabled />
-          </td>
-          <td>
-            <input
-              type="number"
-              value={materialToUpdate.quantity}
-              onChange={(event) => {
-                const value = Number(event.target.value);
-                const updatedMaterial = { ...materialToUpdate, quantity: value };
-                setMaterialToUpdate(updatedMaterial);
-              }}
-            />
-          </td>
-          <td>
-            <input
-              type="number"
-              value={materialToUpdate.price}
-              onChange={(event) => {
-                const value = Number(event.target.value);
-                const updatedMaterial = { ...materialToUpdate, price: value };
-                setMaterialToUpdate(updatedMaterial);
-              }}
-            />
-          </td>
-          
-          <td>
-            <button className='btn btn-info' onClick={() => handleMaterialUpdate(materialToUpdate, materialToUpdate)}>Save</button>
-            <button className='btn btn-secondary' onClick={handleCancel}>Cancel</button>
-          </td>
-        </tr>
-        
-      )}
-      
-    </tbody>
-  </table>
+<div className='materials-container'>
+  {materials.map((material) => (
+    <div className='material-container' key={material.name}>
+      <div className='material-number'>{material.id}</div>
+      <div className='material-name'><h4>{material.name}</h4></div>
+      <div className='material-quantity'><strong>Qty: </strong> {material.quantity}</div>
+      <div className='material-price'><strong>price: </strong> {material.price}</div>
+      <div className='material-ptu'><strong>Ptu: </strong>{getPriceForMaterial(material)}</div>
+      <div className='material-actions'>
+        <button className='btn btn-sm btn-danger' onClick={() => onDelete(material)}><i className='fas fa-trash'/></button>
+        <button className='btn btn-sm btn-info' onClick={() => handleEdit(material)}><i className='fas fa-pen'/></button>
+      </div>
+    </div>
+  ))}
+  
+  {materialToUpdate && (
+    <div className='material-container'>
+      <div className='material-number'>{materialToUpdate.number}</div>
+      <div className='material-name'>{materialToUpdate.name}</div>
+      <div className='material-quantity'>
+        <input
+          type="number"
+          value={materialToUpdate.quantity}
+          onChange={(event) => {
+            const value = Number(event.target.value);
+            const updatedMaterial = { ...materialToUpdate, quantity: value };
+            setMaterialToUpdate(updatedMaterial);
+          }}
+        />
+      </div>
+      <div className='material-price'>
+        <input
+          type="number"
+          value={materialToUpdate.price}
+          onChange={(event) => {
+            const value = Number(event.target.value);
+            const updatedMaterial = { ...materialToUpdate, price: value };
+            setMaterialToUpdate(updatedMaterial);
+          }}
+        />
+      </div>
+      <div className='material-ptu'>{getPriceForMaterial(materialToUpdate)}</div>
+      <div className='material-actions'>
+        <button className='btn btn-info' onClick={() => handleMaterialUpdate(materialToUpdate, materialToUpdate)}>Save</button>
+        <button className='btn btn-secondary' onClick={handleCancel}>Cancel</button>
+      </div>
+    </div>
+  )}
+
   <MaterialForm
     key={key}
     onAdd={handleMaterialAdd}
@@ -113,6 +95,7 @@ function MaterialList({ materials, onDelete, onUpdate, onAdd }) {
     isUpdateForm={!!materialToUpdate}
   />
 </div>
+
 
   );
 }

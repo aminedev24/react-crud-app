@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 
-function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isUpdateForm }) {
+function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel, isUpdateForm }) {
    const [productName, setProductName] = useState("");
    const [selectedOptions, setSelectedOptions] = useState([]);
    const [productQuantity, setProductQuantity] = useState("");
@@ -8,14 +8,14 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
    const [materialQuantities, setMaterialQuantities] = useState({});
    const [materialInputs, setMaterialInputs] = useState({});
    const [formErrors, setFormErrors] = useState({});
-   
+
    useEffect(() => {
       if (productToUpdate) {
-        setName(productToUpdate.name);
-        setQuantity(productToUpdate.quantity);
-        setPrice(productToUpdate.price);
+         setName(productToUpdate.name);
+         setQuantity(productToUpdate.quantity);
+         setPrice(productToUpdate.price);
       }
-    }, [productToUpdate]);
+   }, [productToUpdate]);
 
    const handleProductNameChange = (event) => {
       setProductName(event.target.value);
@@ -41,38 +41,33 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
       const options = event.target.options;
       const newSelectedMaterials = [];
       const newMaterialQuantities = { ...materialQuantities };
-    
+
       for (let i = 0; i < options.length; i++) {
-        const option = options[i];
-    
-        if (option.selected) {
-          const materialName = option.value;
-    
-          newSelectedMaterials.push(materialName);
-    
-          if (!newMaterialQuantities[materialName]) {
-            newMaterialQuantities[materialName] = materials.find((m) => m.name === materialName).defaultQuantity;
-          }
-        } else {
-          const materialName = option.value;
-          const index = newSelectedMaterials.indexOf(materialName);
-    
-          if (index > -1) {
-            newSelectedMaterials.splice(index, 1);
-            delete newMaterialQuantities[materialName];
-          }
-        }
+         const option = options[i];
+
+         if (option.selected) {
+            const materialName = option.value;
+
+            newSelectedMaterials.push(materialName);
+
+            if (!newMaterialQuantities[materialName]) {
+               newMaterialQuantities[materialName] = materials.find((m) => m.name === materialName).defaultQuantity;
+            }
+         } else {
+            const materialName = option.value;
+            const index = newSelectedMaterials.indexOf(materialName);
+
+            if (index > -1) {
+               newSelectedMaterials.splice(index, 1);
+               delete newMaterialQuantities[materialName];
+            }
+         }
       }
-      
+
       setSelectedMaterials(newSelectedMaterials);
       setMaterialQuantities(newMaterialQuantities);
       setMaterialInputs({});
-    };
-    
-   
-    
-
-    
+   };
 
    useEffect(() => {
       setFormErrors({});
@@ -120,53 +115,52 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
 
    const handleAddProduct = (event) => {
       event.preventDefault();
-    
+
       const isValid = validateForm();
-    
+
       if (isValid) {
-        const selectedMaterialObjects = selectedMaterials.map((materialName) => {
-          const material = materials.find((m) => m.name === materialName);
-    
-          return { ...material, quantity: Number(materialQuantities[materialName]) };
-        });
-    
-        const materialsCost = selectedMaterialObjects.reduce(
-          (total, material) => total + material.quantity * material.price,
-          
-          0
-        );
-    
-        const price = (materialsCost / Number(productQuantity)).toFixed(2);
-    
-        const newProduct = {
-          name: productName,
-          quantity: Number(productQuantity),
-          materials: selectedMaterialObjects,
-          price: price,
-        };
-    
-        onAdd(newProduct);
-    
-        setProductName("");
-    
-        setProductQuantity("");
-    
-        setSelectedMaterials([]);
-    
-        setMaterialQuantities({});
+         const selectedMaterialObjects = selectedMaterials.map((materialName) => {
+            const material = materials.find((m) => m.name === materialName);
+
+            return { ...material, quantity: Number(materialQuantities[materialName]) };
+         });
+
+         const materialsCost = selectedMaterialObjects.reduce(
+            (total, material) => total + material.quantity * material.price,
+
+            0
+         );
+
+         const price = (materialsCost / Number(productQuantity)).toFixed(2);
+
+         const newProduct = {
+            name: productName,
+            quantity: Number(productQuantity),
+            materials: selectedMaterialObjects,
+            price: price,
+         };
+
+         onAdd(newProduct);
+
+         setProductName("");
+
+         setProductQuantity("");
+
+         setSelectedMaterials([]);
+
+         setMaterialQuantities({});
       }
-    };
-    
+   };
 
    return (
       <form className="add-product-form" onSubmit={handleAddProduct}>
-         <h3>{isUpdateForm ? 'Update Product' : 'Add Product'}</h3>
+         <h3>{isUpdateForm ? "Update Product" : "Add Product"}</h3>
          <div>
             <label htmlFor="productName">Product Name:</label>
 
             <input type="text" id="productName" value={productName} onChange={handleProductNameChange} />
 
-            {formErrors.productName && <p className='error-message'>{formErrors.productName}</p>}
+            {formErrors.productName && <p className="error-message">{formErrors.productName}</p>}
          </div>
 
          <div>
@@ -174,13 +168,13 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
 
             <input type="text" id="productQuantity" value={productQuantity} onChange={handleProductQuantityChange} />
 
-            {formErrors.productQuantity && <p className='error-message'>{formErrors.productQuantity}</p>}
+            {formErrors.productQuantity && <p className="error-message">{formErrors.productQuantity}</p>}
          </div>
 
          <div>
             <label htmlFor="materials">Materials:</label>
 
-            <select className="form-control"  id="materials" multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
+            <select className="form-control" id="materials" multiple={true} value={selectedMaterials} onChange={handleMaterialSelect}>
                {materials.map((material) => (
                   <option key={material.name} value={material.name}>
                      {material.name}
@@ -188,13 +182,12 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
                ))}
             </select>
 
-            {formErrors.materials && typeof formErrors.materials === "string" && 
-            <p className='error-message'>{formErrors.materials}</p>}
+            {formErrors.materials && typeof formErrors.materials === "string" && <p className="error-message">{formErrors.materials}</p>}
 
             {formErrors.materials && typeof formErrors.materials === "object" && (
                <ul>
                   {selectedMaterials.map((materialName) => (
-                     <li className='error-message' key={materialName}>
+                     <li className="error-message" key={materialName}>
                         {materialName}: {formErrors.materials[materialName]}
                      </li>
                   ))}
@@ -203,24 +196,17 @@ function ProductForm({ materials, onAdd, onUpdate, productToUpdate, onCancel,isU
          </div>
 
          {selectedMaterials.map((materialName) => (
-  <div key={materialName}>
-    <label htmlFor={`quantity-${materialName}`}>{materialName} Quantity:</label>
-    <input
-      type="text"
-      id={`quantity-${materialName}`}
-      value={materialQuantities[materialName] || ""}
-      onChange={(event) => handleQuantityChange(event, materialName)}
-    />
-    {formErrors.materials && formErrors.materials[materialName] && (
-      <p className="error-message">{formErrors.materials[materialName]}</p>
-    )}
-  </div>
-))}
-
-
+            <div key={materialName}>
+               <label htmlFor={`quantity-${materialName}`}>{materialName} Quantity:</label>
+               <input type="text" id={`quantity-${materialName}`} value={materialQuantities[materialName] || ""} onChange={(event) => handleQuantityChange(event, materialName)} />
+               {formErrors.materials && formErrors.materials[materialName] && <p className="error-message">{formErrors.materials[materialName]}</p>}
+            </div>
+         ))}
 
          <div>
-            <button className='btn btn-primary' type="submit"><i className="fas fa-plus"></i></button>
+            <button className="btn btn-primary" type="submit">
+               <i className="fas fa-plus"></i>
+            </button>
          </div>
       </form>
    );
