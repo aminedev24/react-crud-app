@@ -7,6 +7,7 @@ import ProductList from './productList';
 import ProductQuantityForm from './productQuantityForm';
 import LocalStorageHandler from './save';
 import SellProduct from './sell'
+//import Main from './test'
 
 const initialMaterials = [
   { name: 'Water', quantity: 100, price: 5 ,id: 1},
